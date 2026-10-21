@@ -6,6 +6,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import AnymalC from "./AnymalC";
 import { Site } from "./Site";
 import { sim } from "@/lib/simworld";
+import { orchestrator } from "@/lib/orchestrator";
 
 function Ticker() {
   const gl = useThree((s) => s.gl);
@@ -16,12 +17,13 @@ function Ticker() {
       frames: () => sim.frames,
       tris: () => gl.info.render.triangles,
       joints: () => sim.jointCount,
-      mode: () => sim.mode,
+      mode: () => (orchestrator.runner.busy ? "mission" : sim.mode),
+      pose: () => sim.pose,
     };
   }, [gl]);
 
   useFrame((_, dt) => {
-    sim.tick(dt);
+    orchestrator.tick(dt);
   });
   return null;
 }

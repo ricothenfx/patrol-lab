@@ -3,23 +3,7 @@
 import { useMemo } from "react";
 import * as THREE from "three";
 import { Grid, Html, OrbitControls } from "@react-three/drei";
-
-export interface Poi {
-  id: string;
-  label: string;
-  x: number;
-  z: number;
-  color: string;
-  kind: "pump" | "transformer" | "gauge" | "valve" | "tank";
-}
-
-export const POIS: Poi[] = [
-  { id: "pump_station", label: "PUMP-01 · pump station", x: 3.4, z: 2.2, color: "#ffb454", kind: "pump" },
-  { id: "transformer_row", label: "TR-ROW · transformers", x: -3.8, z: 2.8, color: "#57b6ff", kind: "transformer" },
-  { id: "gauge_bank", label: "GAUGE-BANK", x: -3.2, z: -2.6, color: "#35e0a1", kind: "gauge" },
-  { id: "valve_manifold", label: "VALVE-MANIFOLD", x: 0.6, z: -3.4, color: "#ff5d5d", kind: "valve" },
-  { id: "tank_farm", label: "TANK-FARM", x: 4.1, z: -1.8, color: "#b48cff", kind: "tank" },
-];
+import { POIS, type Poi } from "@/lib/site";
 
 function PoiMarker({ poi }: { poi: Poi }) {
   const pos = useMemo(() => new THREE.Vector3(poi.x, 0, poi.z), [poi.x, poi.z]);
