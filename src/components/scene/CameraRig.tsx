@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable react-hooks/immutability -- three.js objects are imperative systems mutated inside the frame loop by design (ADR-04) */
+
 import { useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
@@ -28,6 +30,8 @@ export function CameraRig() {
 
   useFrame(({ clock }) => {
     const mode = useUi.getState().camMode;
+    // three.js OrbitControls is an imperative object; toggling `enabled` inside
+    // the frame loop is its intended API (not React state).
     if (controls) controls.enabled = mode === "orbit";
     if (mode !== "follow" || sim.mode === "unloaded") {
       following.current = false;

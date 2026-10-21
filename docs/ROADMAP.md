@@ -33,7 +33,7 @@ Each phase ends with: lint + build green, Playwright checks for affected flows,
 - Mission timeline, POI registry, live minimap, replay of the last mission.
 - **DoD:** every dashboard number traces to a metric source; replay mode works offline.
 
-## Phase 5 — LLM plugins (optional at runtime)
+## Phase 5 — LLM plugins (done)
 - NL → mission DSL compiler with validate-retry loop; mock mode pre-baked.
 - Grounded inspection report writer (report cites event IDs).
 - **DoD:** without API key UI shows nothing broken; with key, compile→run works;

@@ -1,4 +1,4 @@
-import type { Mission, MissionError, ParseResult, Statement, InspectMode, Metric, Op, AlertIf } from "./types";
+import type { MissionError, ParseResult, Statement, InspectMode, Metric, Op, AlertIf } from "./types";
 import { POI_BY_ID } from "../site";
 
 /**

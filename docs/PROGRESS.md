@@ -1,7 +1,7 @@
 # PROGRESS — patrol-lab
 
 ## Status
-Phase: 4 (control-room dashboard) — done. Next: Phase 5 (LLM plugins).
+Phase: 5 (LLM plugins) — done. Next: Phase 6 (hardening + launch).
 
 ## Log
 - 2026-10-21: P0 — scaffold (Next 16 + R3F 9 + CodeMirror 6 + zustand), vendored
@@ -41,3 +41,12 @@ Phase: 4 (control-room dashboard) — done. Next: Phase 5 (LLM plugins).
   base pivot, wiping the MJCF 180-deg quaternion — roll now multiplies on top
   of the preserved base quaternion. Textures downscaled to 512 px
   (12 MB -> 1.3 MB) after cold-start frame-rate flake; playwright retries=1.
+- 2026-10-21: P5 — LLM as optional plugin (ADR-06): POST /api/llm/compile
+  (NL -> mission DSL; grammar in system prompt; parse-validate + one bounded
+  retry feeding parser errors back; mock rule-based artifacts when no key /
+  MOCK_MODE=1, labeled MOCK in UI) and POST /api/llm/report (grounded report
+  from the mission log; strict-JSON contract; honest rule-based fallback
+  labeled RULE-BASED). UI: NL bar with reviewable diff + accept/discard,
+  report panel. e2e/llm.spec.ts covers mock compile->accept->run->report.
+  Orientation regression spec added (holder-frame guard). Lint clean
+  (react-hooks/immutability disabled only in three.js-imperative files).

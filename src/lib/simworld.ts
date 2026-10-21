@@ -6,8 +6,8 @@ export type SimMode = "unloaded" | "idle" | "mission";
 
 const BASE_SPEED = 0.85; // m/s at 1×
 const TURN_RATE = 1.9; // rad/s
-const ARRIVE_EPS = 0.22;
 const STRIDE_RATE = 1.55; // gait cycles per second at 1×
+const ARRIVE_EPS = 0.22; // meters — considered "at the POI"
 
 const _xAxis = new THREE.Vector3(1, 0, 0);
 const _roll = new THREE.Quaternion();
@@ -165,7 +165,6 @@ export class SimWorld {
   }
 
   private tickLocomotion(dt: number, speedMult: number): void {
-    const rig = this.rig!;
     const target = this.target;
 
     if (this.scanning) {

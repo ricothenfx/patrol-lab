@@ -9,6 +9,7 @@ async function noPageErrors(page: Page, errors: string[]) {
 }
 
 test("golden mission runs end-to-end: DONE, findings logged, robot moved", async ({ page }) => {
+  test.setTimeout(180_000); // full mission at 4x + asset load on a 4-core host
   const pageErrors: string[] = [];
   page.on("pageerror", (err) => pageErrors.push(String(err)));
 

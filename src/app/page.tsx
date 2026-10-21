@@ -1,6 +1,7 @@
 import { Viewport } from "@/components/Viewport";
 import { MissionEditor } from "@/components/editor/MissionEditor";
 import { MissionControls } from "@/components/editor/MissionControls";
+import { NlCompileBar, ReportPanel } from "@/components/editor/AiTools";
 
 export default function Home() {
   return (
@@ -24,7 +25,9 @@ export default function Home() {
           <div className="editor-host-wrap">
             <MissionEditor />
           </div>
+          <NlCompileBar />
           <MissionControls />
+          <ReportPanel />
         </aside>
 
         <Viewport />

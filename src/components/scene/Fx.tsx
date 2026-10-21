@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable react-hooks/immutability -- three.js objects are imperative systems mutated inside the frame loop by design (ADR-04) */
+
 import { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";

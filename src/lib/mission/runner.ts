@@ -45,7 +45,6 @@ function approachPoint(x: number, z: number, stopDistance: number): [number, num
   return [sim.pose.x + dx * ratio, sim.pose.z + dz * ratio];
 }
 const SCAN_SECONDS = 3.0;
-const ARRIVE_EPS = 0.22;
 
 /**
  * The interpreter (ADR-05). Deterministic: fixed-timestep integration; sensor

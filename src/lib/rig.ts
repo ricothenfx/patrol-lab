@@ -99,7 +99,7 @@ export function buildRig(spec: RigSpec, geometries: Map<string, THREE.BufferGeom
   let geomCount = 0;
 
   const ensurePivot = (bodyName: string): THREE.Object3D => {
-    let pivot = bodyPivots.get(bodyName);
+    const pivot = bodyPivots.get(bodyName);
     if (pivot) return pivot;
     const def = byName.get(bodyName);
     if (!def) throw new Error(`rig: unknown body ${bodyName}`);
