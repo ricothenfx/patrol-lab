@@ -21,6 +21,7 @@ function Ticker() {
       joints: () => sim.jointCount,
       mode: () => (orchestrator.runner.busy ? "mission" : sim.mode),
       pose: () => sim.pose,
+      orient: () => sim.orientation(),
     };
   }, [gl]);
 

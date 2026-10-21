@@ -2,6 +2,8 @@
 
 import dynamic from "next/dynamic";
 import { useUi } from "@/state/store";
+import { KpiOverlay } from "@/components/dashboard/KpiOverlay";
+import { MiniMap } from "@/components/dashboard/MiniMap";
 
 const Scene = dynamic(() => import("./scene/Scene"), {
   ssr: false,
@@ -9,7 +11,7 @@ const Scene = dynamic(() => import("./scene/Scene"), {
 });
 
 export function Viewport() {
-  const { loadDone, loadTotal, viewportReady, simMode, camMode, setCamMode } = useUi();
+  const { loadDone, loadTotal, viewportReady, simMode, camMode, setCamMode, snapshot } = useUi();
   const pct = loadTotal > 0 ? Math.round((loadDone / loadTotal) * 100) : 0;
 
   return (
@@ -43,7 +45,13 @@ export function Viewport() {
         </button>
       </div>
 
-      {viewportReady && <div data-testid="viewport-ready" className="viewport-ready-flag" />}
+      {viewportReady && (
+        <>
+          <div data-testid="viewport-ready" className="viewport-ready-flag" />
+          <KpiOverlay snapshot={snapshot} />
+          <MiniMap />
+        </>
+      )}
     </section>
   );
 }

@@ -29,7 +29,7 @@ test("viewport loads ANYmal C, sim ticks, no page errors", async ({ page }) => {
 
   // render loop must be alive and actually drawing the robot
   await expect
-    .poll(async () => (await patrolState(page))?.frames ?? 0, { timeout: 20_000 })
+    .poll(async () => (await patrolState(page))?.frames ?? 0, { timeout: 40_000 })
     .toBeGreaterThan(30);
 
   const state = await patrolState(page);

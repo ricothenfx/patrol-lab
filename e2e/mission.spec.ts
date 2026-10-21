@@ -35,6 +35,17 @@ test("golden mission runs end-to-end: DONE, findings logged, robot moved", async
   const line = await page.getByTestId("current-line").textContent();
   expect(Number(line)).toBeGreaterThan(0);
 
+  // control-room layer: telemetry card + tac map reflect real sim state
+  await expect(page.getByTestId("kpi-card")).toBeVisible();
+  // patrol_alpha inspects 3 distinct POIs (gauge_bank twice) — deterministic
+  await expect(page.getByTestId("kpi-coverage")).toContainText("3/5");
+  const odo = await page.getByTestId("kpi-odo").textContent();
+  expect(parseFloat(odo!)).toBeGreaterThan(10);
+  await expect(page.getByTestId("minimap")).toBeVisible();
+  await expect(page.locator('[data-testid="kpi-pois"] .poi-chip').first()).toBeAttached();
+  // all chips marked inspected after the mission
+  expect(await page.locator('[data-testid="kpi-pois"] .poi-done').count()).toBe(3);
+
   const poseEnd = await page.evaluate(() => window.__patrol!.pose());
   expect(poseEnd.x).not.toBe(0); // robot actually left the origin
 

@@ -475,6 +475,117 @@ body {
   border-color: var(--info);
 }
 
+/* ---------- dashboard overlays ---------- */
+.kpi-card {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 250px;
+  background: color-mix(in srgb, var(--bg-1) 88%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  pointer-events: none;
+  backdrop-filter: blur(3px);
+}
+
+.kpi-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.kpi-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--text-2);
+}
+
+.kpi-mode {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent);
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px 6px;
+  margin-top: 10px;
+}
+
+.kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.kpi-value {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-0);
+}
+
+.kpi-alert {
+  color: var(--alert);
+}
+
+.kpi-key {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+  color: var(--text-2);
+}
+
+.kpi-mono {
+  font-size: 13px;
+}
+
+.kpi-pois {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 10px;
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+}
+
+.poi-chip {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.05em;
+  color: var(--text-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 1.5px 7px;
+}
+
+.poi-done {
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+
+.minimap {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  background: color-mix(in srgb, var(--bg-1) 88%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px;
+  pointer-events: none;
+  backdrop-filter: blur(3px);
+}
+
+.minimap-title {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  color: var(--text-2);
+  margin-bottom: 6px;
+}
+
 .viewport-ready-flag {
   display: none;
 }

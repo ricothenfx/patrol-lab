@@ -47,7 +47,7 @@ export const useUi = create<UiState>((set) => ({
   loadTotal: 0,
   viewportReady: false,
   simMode: "KINEMATIC",
-  camMode: "orbit",
+  camMode: "follow",
   setCamMode: (camMode) => set({ camMode }),
   setProgress: (loadDone, loadTotal) => set({ loadDone, loadTotal }),
   setViewportReady: (viewportReady) => set({ viewportReady }),

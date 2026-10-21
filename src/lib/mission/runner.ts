@@ -2,6 +2,7 @@ import type { Mission } from "./types";
 import { POI_BY_ID, POI_POS } from "../site";
 import { readSensors, compareMetric, type Finding } from "./findings";
 import type { SimWorld } from "../simworld";
+import { sim } from "../simworld";
 import type { AlertIf } from "./types";
 
 export type MissionStatus = "IDLE" | "RUNNING" | "PAUSED" | "DONE";
@@ -30,6 +31,19 @@ export interface RunnerSnapshot {
 }
 
 const FIXED_DT = 1 / 120;
+
+/**
+ * Stop short of the POI center so the robot parks beside the asset, facing it,
+ * instead of standing inside its plinth.
+ */
+function approachPoint(x: number, z: number, stopDistance: number): [number, number] {
+  const dx = x - sim.pose.x;
+  const dz = z - sim.pose.z;
+  const d = Math.hypot(dx, dz);
+  if (d <= stopDistance || d === 0) return [x, z];
+  const ratio = (d - stopDistance) / d;
+  return [sim.pose.x + dx * ratio, sim.pose.z + dz * ratio];
+}
 const SCAN_SECONDS = 3.0;
 const ARRIVE_EPS = 0.22;
 
@@ -144,18 +158,20 @@ export class MissionRunner {
       case "goto": {
         const p = POI_POS[stmt.poi];
         this.phase = "walking";
-        this.sim.setMissionTarget(p.x, p.z, stmt.speed ?? 1, stmt.poi);
+        const [tx, tz] = approachPoint(p.x, p.z, 0.9);
+        this.sim.setMissionTarget(tx, tz, stmt.speed ?? 1, stmt.poi);
         this.log("goto", stmt.line, `en route → ${stmt.poi.toUpperCase()}${stmt.speed ? ` @ ${stmt.speed}×` : ""}`);
         break;
       }
       case "inspect": {
         const p = POI_POS[stmt.poi];
-        const at = this.sim.atPoint(p.x, p.z, 0.4);
+        const at = this.sim.atPoint(p.x, p.z, 1.1);
         if (!at) {
           // implicit walk-to, then scan (logged, still deterministic)
           this.implicitGoto = true;
           this.phase = "walking";
-          this.sim.setMissionTarget(p.x, p.z, 1, stmt.poi);
+          const [tx, tz] = approachPoint(p.x, p.z, 0.9);
+          this.sim.setMissionTarget(tx, tz, 1, stmt.poi);
           this.log("goto", stmt.line, `repositioning → ${stmt.poi.toUpperCase()} (INSPECT target)`);
         } else {
           this.beginScan(stmt);

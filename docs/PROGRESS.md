@@ -1,7 +1,7 @@
 # PROGRESS — patrol-lab
 
 ## Status
-Phase: 3 (locomotion + follow camera + scan FX) — done. Next: Phase 4 (control-room dashboard).
+Phase: 4 (control-room dashboard) — done. Next: Phase 5 (LLM plugins).
 
 ## Log
 - 2026-10-21: P0 — scaffold (Next 16 + R3F 9 + CodeMirror 6 + zustand), vendored
@@ -29,3 +29,15 @@ Phase: 3 (locomotion + follow camera + scan FX) — done. Next: Phase 4 (control
   rotating beam, 3 s sync with interpreter), playwright retries=1 for the 4-core
   host. A* planner intentionally deferred: site graph has no obstacles, straight
   legs are already optimal — revisit if the site gains no-go zones (ROADMAP note).
+- 2026-10-21: P4 — control-room layer: mission telemetry KPI card (clock,
+  odometer, POI coverage, findings, alerts, seed — all real metrics), POI
+  coverage chips, canvas tactical minimap (POIs, robot pose/heading, target
+  link), default follow camera with delta-tracking + ideal-framing drift,
+  park-beside-POI approach offsets.
+  Two structural bugs found by screenshot review + a quaternion probe
+  (e2e/orient.spec.ts): (1) yaw/position applied inside the mujoco frame
+  pitched the robot 90 deg and lifted it by pose.z — fixed with a three-space
+  `holder` group above the axis-flip root; (2) gait roll wrote Euler onto the
+  base pivot, wiping the MJCF 180-deg quaternion — roll now multiplies on top
+  of the preserved base quaternion. Textures downscaled to 512 px
+  (12 MB -> 1.3 MB) after cold-start frame-rate flake; playwright retries=1.

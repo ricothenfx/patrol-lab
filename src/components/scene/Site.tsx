@@ -35,7 +35,7 @@ export function Site() {
   return (
     <>
       <color attach="background" args={["#07090c"]} />
-      <fog attach="fog" args={["#07090c", 16, 46]} />
+      <fog attach="fog" args={["#07090c", 22, 75]} />
 
       <ambientLight intensity={0.32} color="#8fa3bf" />
       {/* hero fill: keeps the robot readable in the wide dark shot */}
@@ -74,8 +74,8 @@ export function Site() {
         sectionSize={3}
         sectionThickness={1}
         sectionColor="#1c2836"
-        fadeDistance={42}
-        fadeStrength={1.4}
+        fadeDistance={70}
+        fadeStrength={1.1}
         infiniteGrid
       />
 

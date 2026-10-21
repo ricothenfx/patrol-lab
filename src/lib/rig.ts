@@ -61,20 +61,30 @@ export interface JointHandle {
 }
 
 export interface Rig {
+  /** three.js-space transform target: position (x,0,z) + yaw around Y */
+  holder: THREE.Group;
   root: THREE.Group;
   driver: THREE.Group;
   joints: Map<string, JointHandle>;
   bodyPivots: Map<string, THREE.Object3D>;
   standPose: Record<string, number>;
+  /** original base quaternion from the MJCF (includes the 180° Z flip) */
+  baseQuat: THREE.Quaternion;
   meshCount: number;
   geomCount: number;
 }
 
 export function buildRig(spec: RigSpec, geometries: Map<string, THREE.BufferGeometry>, materials: Map<string, THREE.Material>): Rig {
+  // holder lives in plain three.js world space; root applies ONLY the
+  // MuJoCo Z-up -> three.js Y-up axis fix. Mixing yaw/position into the
+  // mujoco frame would pitch the robot and lift it by pose.z.
+  const holder = new THREE.Group();
+  holder.name = "anymal-holder";
+
   const root = new THREE.Group();
   root.name = "anymal-root";
-  // MuJoCo Z-up -> three.js Y-up
   root.rotation.x = -Math.PI / 2;
+  holder.add(root);
 
   const driver = new THREE.Group();
   driver.name = "anymal-driver";
@@ -122,6 +132,7 @@ export function buildRig(spec: RigSpec, geometries: Map<string, THREE.BufferGeom
   // base body has a freejoint in MJCF (skipped by the baker); its pivot is its
   // own container so we can bob height without touching legs.
   for (const b of spec.bodies) ensurePivot(b.name);
+  const baseQuat = bodyPivots.get("base")!.quaternion.clone();
 
   for (const g of spec.geoms) {
     const geometry = geometries.get(g.mesh);
@@ -141,7 +152,7 @@ export function buildRig(spec: RigSpec, geometries: Map<string, THREE.BufferGeom
     geomCount += 1;
   }
 
-  return { root, driver, joints, bodyPivots, standPose: spec.stand_pose, meshCount, geomCount };
+  return { holder, root, driver, joints, bodyPivots, standPose: spec.stand_pose, baseQuat, meshCount, geomCount };
 }
 
 /** Apply a named joint angle (radians), clamped to the MJCF range. */

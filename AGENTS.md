@@ -44,7 +44,9 @@ Development must rely on these documents, never on chat history.
   assume port 3000 is free; local/e2e server uses `next start -p 3031` (registered in
   `~/PORTS.md`). Production runs on Vercel, not on this host.
 - **Verification before done:** `npm run lint && npm run build` must pass, plus
-  `npx playwright test` for affected flows. Phases are only complete after push.
+  `npx playwright test` for affected flows. Always clean-build (`rm -rf .next`)
+  when a source change "mysteriously" does not appear — the Turbopack incremental
+  cache has served stale modules before. Phases are only complete after push.
 - **Commits:** conventional commits (`feat|fix|docs|chore|refactor|test(scope): msg`).
   One commit (or more) per phase, pushed; `docs/PROGRESS.md` updated in the same push.
 

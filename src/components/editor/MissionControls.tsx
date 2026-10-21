@@ -40,6 +40,7 @@ export function MissionControls() {
   const onRun = () => {
     const res = runCurrentMission();
     setRunError(res.ok ? null : (res.error ?? "cannot start"));
+    if (res.ok) useUi.getState().setCamMode("follow");
   };
 
   return (

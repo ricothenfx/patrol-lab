@@ -1,3 +1,4 @@
+import * as THREE from "three";
 import type { Rig } from "./rig";
 import { setJointAngle } from "./rig";
 
@@ -7,6 +8,9 @@ const BASE_SPEED = 0.85; // m/s at 1×
 const TURN_RATE = 1.9; // rad/s
 const ARRIVE_EPS = 0.22;
 const STRIDE_RATE = 1.55; // gait cycles per second at 1×
+
+const _xAxis = new THREE.Vector3(1, 0, 0);
+const _roll = new THREE.Quaternion();
 
 function wrapAngle(a: number): number {
   while (a > Math.PI) a -= 2 * Math.PI;
@@ -38,9 +42,24 @@ export class SimWorld {
   private t = 0;
   private gaitPhase = 0;
   frames = 0;
+  odometer = 0; // meters walked since attach — real metric, shown in the KPI card
 
   get jointCount(): number {
     return this.rig ? this.rig.joints.size : 0;
+  }
+
+  /** debug: world-space orientation of driver + base as euler angles (rad) */
+  orientation(): { driver: [number, number, number]; base: [number, number, number] } {
+    if (!this.rig) return { driver: [0, 0, 0], base: [0, 0, 0] };
+    const q = new THREE.Quaternion();
+    const e = new THREE.Euler();
+    this.rig.driver.getWorldQuaternion(q);
+    e.setFromQuaternion(q);
+    const driver: [number, number, number] = [e.x, e.y, e.z];
+    const basePivot = this.rig.bodyPivots.get("base")!;
+    basePivot.getWorldQuaternion(q);
+    e.setFromQuaternion(q);
+    return { driver, base: [e.x, e.y, e.z] };
   }
 
   get arrived(): boolean {
@@ -175,6 +194,7 @@ export class SimWorld {
       const step = Math.min(dist, BASE_SPEED * speedMult * dt);
       this.pose.x += Math.cos(this.pose.heading) * step;
       this.pose.z += -Math.sin(this.pose.heading) * step;
+      this.odometer += step;
       this.gaitPhase += dt * STRIDE_RATE * speedMult;
     }
 
@@ -220,15 +240,17 @@ export class SimWorld {
     }
 
     // body bob + slight roll following the diagonal pairs
+    // (roll multiplies ON TOP of the MJCF base quaternion — never overwrite it)
     const basePivot = rig.bodyPivots.get("base");
     if (basePivot) {
       basePivot.position.z = 0.62 + 0.014 * Math.abs(swing);
-      basePivot.rotation.x = 0.015 * Math.sin(2 * Math.PI * this.gaitPhase);
+      _roll.setFromAxisAngle(_xAxis, 0.015 * Math.sin(2 * Math.PI * this.gaitPhase));
+      basePivot.quaternion.copy(rig.baseQuat).multiply(_roll);
     }
 
-    // publish driver transform (MuJoCo Z-up rig lives inside; driver is Y-up)
-    rig.driver.position.set(this.pose.x, 0, this.pose.z);
-    rig.driver.rotation.y = this.pose.heading;
+    // publish holder transform (three.js world space)
+    rig.holder.position.set(this.pose.x, 0, this.pose.z);
+    rig.holder.rotation.y = this.pose.heading;
   }
 }
 
@@ -242,6 +264,7 @@ declare global {
       joints: () => number;
       mode: () => string;
       pose: () => Pose;
+      orient: () => { driver: [number, number, number]; base: [number, number, number] };
     };
   }
 }
