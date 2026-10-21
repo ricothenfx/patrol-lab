@@ -5,7 +5,9 @@ left, watch an ANYmal C quadruped execute it on a live 3D industrial site on the
 Every alert, ETA and coverage number on the dashboard comes from the running
 simulation — deterministic, seeded, reproducible.
 
-![status](https://img.shields.io/badge/status-under_construction-ffb454)
+**Live:** https://patrol-lab.vercel.app (add `patrol-lab.ricothen.com` via CNAME → `cname.vercel-dns.com`)
+
+![patrol-lab mission control](docs/screenshot-mission.png)
 
 > Independent portfolio project. Not affiliated with ANYbotics AG. Robot model:
 > [MuJoCo Menagerie](https://github.com/google-deepmind/mujoco_menagerie)
@@ -29,7 +31,22 @@ kinematics (labeled as such), 60 fps on an integrated laptop GPU.
 
 ## Status
 
-Under construction — see docs/ROADMAP.md and docs/PROGRESS.md.
+Phases 0–5 shipped (see docs/ROADMAP.md):
+
+- MJCF-faithful ANYmal C rig — the MuJoCo mesh-COM offsets are baked from the
+  real model (`scripts/bake_rig.py`); without them every visual geom drifts.
+- Mission DSL with line-accurate parser errors; debugger execution: run /
+  pause / step / reset, playback 0.5–4×, seeded sensor readings (same seed →
+  same findings, reproducible).
+- Kinematic trot gait + heading control, honest `KINEMATIC` label (dynamics via
+  MuJoCo WASM is the designed next step — see docs/BLUEPRINT.md ADR-02).
+- Control-room: telemetry KPI card (clock, odometer, coverage, findings,
+  alerts), POI chips, tactical minimap, follow camera, scan FX.
+- LLM plugins (optional): NL → mission compiler and grounded inspection
+  reports. Without `OPENAI_API_KEY` the endpoints serve rule-based mock
+  artifacts labeled `MOCK` / `RULE-BASED` — the app never breaks.
+- E2E suite (Playwright): golden mission, parse-error refusal, step mode,
+  orientation regression guard, LLM mock flow.
 
 ## Development
 
