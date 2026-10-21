@@ -5,6 +5,8 @@ import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import AnymalC from "./AnymalC";
 import { Site } from "./Site";
+import { CameraRig } from "./CameraRig";
+import { RouteLine, TargetMarker, ScanFx } from "./Fx";
 import { sim } from "@/lib/simworld";
 import { orchestrator } from "@/lib/orchestrator";
 
@@ -41,7 +43,11 @@ export default function Scene() {
     >
       <Ticker />
       <Site />
+      <RouteLine />
+      <TargetMarker />
+      <ScanFx />
       <AnymalC />
+      <CameraRig />
     </Canvas>
   );
 }

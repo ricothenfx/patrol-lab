@@ -458,6 +458,23 @@ body {
   color: var(--text-2);
 }
 
+.cam-toggle {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: var(--info);
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--info) 35%, var(--line));
+  border-radius: 4px;
+  padding: 1px 7px;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.cam-toggle:hover {
+  border-color: var(--info);
+}
+
 .viewport-ready-flag {
   display: none;
 }

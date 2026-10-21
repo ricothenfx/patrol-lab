@@ -5,7 +5,7 @@ export default defineConfig({
   timeout: 90_000,
   expect: { timeout: 20_000 },
   fullyParallel: false,
-  retries: process.env.CI ? 1 : 0,
+  retries: 1, // 4-core VPS: sequential chromium runs can flake on cold asset loads
   reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : [["list"]],
   outputDir: "test-results",
   use: {

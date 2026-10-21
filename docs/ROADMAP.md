@@ -22,8 +22,8 @@ Each phase ends with: lint + build green, Playwright checks for affected flows,
   missions produce line-accurate errors.
 
 ## Phase 3 — Locomotion + path following
-- Path planner (A*) over site graph; heading control; CPG trot gait (kinematic driver).
-- `INSPECT` choreography: approach → scan sweep effect (points/shader) → result event.
+- Heading control + CPG trot gait (kinematic driver). [A* deferred: no obstacles yet — straight legs optimal; revisit with no-go zones]
+- `INSPECT` choreography: approach → scan sweep FX (rings + beam) → result event.
 - Camera modes: orbit / follow.
 - **DoD:** golden mission completes deterministically for a fixed seed; foot slip
   artifacts absent at normal speed; e2e asserts mission completion event.

@@ -24,6 +24,8 @@ interface UiState {
   loadTotal: number;
   viewportReady: boolean;
   simMode: "KINEMATIC";
+  camMode: "orbit" | "follow";
+  setCamMode: (m: "orbit" | "follow") => void;
   setProgress: (done: number, total: number) => void;
   setViewportReady: (ready: boolean) => void;
 
@@ -45,6 +47,8 @@ export const useUi = create<UiState>((set) => ({
   loadTotal: 0,
   viewportReady: false,
   simMode: "KINEMATIC",
+  camMode: "orbit",
+  setCamMode: (camMode) => set({ camMode }),
   setProgress: (loadDone, loadTotal) => set({ loadDone, loadTotal }),
   setViewportReady: (viewportReady) => set({ viewportReady }),
 

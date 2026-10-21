@@ -9,7 +9,7 @@ const Scene = dynamic(() => import("./scene/Scene"), {
 });
 
 export function Viewport() {
-  const { loadDone, loadTotal, viewportReady, simMode } = useUi();
+  const { loadDone, loadTotal, viewportReady, simMode, camMode, setCamMode } = useUi();
   const pct = loadTotal > 0 ? Math.round((loadDone / loadTotal) * 100) : 0;
 
   return (
@@ -33,6 +33,14 @@ export function Viewport() {
         SITE A · SUBSTATION SIM
         <span className="badge-sep">·</span>
         {simMode}
+        <span className="badge-sep">·</span>
+        <button
+          className="cam-toggle"
+          data-testid="cam-toggle"
+          onClick={() => setCamMode(camMode === "orbit" ? "follow" : "orbit")}
+        >
+          {camMode === "follow" ? "◎ follow" : "✥ orbit"}
+        </button>
       </div>
 
       {viewportReady && <div data-testid="viewport-ready" className="viewport-ready-flag" />}

@@ -1,7 +1,7 @@
 # PROGRESS — patrol-lab
 
 ## Status
-Phase: 2 (mission DSL + editor) — done. Next: Phase 3 (locomotion + path following).
+Phase: 3 (locomotion + follow camera + scan FX) — done. Next: Phase 4 (control-room dashboard).
 
 ## Log
 - 2026-10-21: P0 — scaffold (Next 16 + R3F 9 + CodeMirror 6 + zustand), vendored
@@ -24,3 +24,8 @@ Phase: 2 (mission DSL + editor) — done. Next: Phase 3 (locomotion + path follo
   `next start` — Turbopack incremental cache served a stale module once (currentLine
   bug seen in tests but not in source); clean `.next` on doubt. test-results/ now
   gitignored.
+- 2026-10-21: P3 — follow/orbit camera toggle (exp-smoothed, OrbitControls gated),
+  route line robot→target, pulsing target ring, INSPECT scan FX (expanding rings +
+  rotating beam, 3 s sync with interpreter), playwright retries=1 for the 4-core
+  host. A* planner intentionally deferred: site graph has no obstacles, straight
+  legs are already optimal — revisit if the site gains no-go zones (ROADMAP note).
