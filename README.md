@@ -5,7 +5,7 @@ left, watch an ANYmal C quadruped execute it on a live 3D industrial site on the
 Every alert, ETA and coverage number on the dashboard comes from the running
 simulation — deterministic, seeded, reproducible.
 
-**Live:** https://patrol-lab.vercel.app (add `patrol-lab.ricothen.com` via CNAME → `cname.vercel-dns.com`)
+**Live:** https://patrol-lab.ricothen.com (also at https://patrol-lab.vercel.app)
 
 ![patrol-lab mission control](docs/screenshot-mission.png)
 

@@ -59,3 +59,8 @@ Phase 6 (hardening + launch) — done. Shipped: https://patrol-lab.vercel.app
   ("portfolio") — rolled back to the previous production deployment and
   re-deployed explicitly from an isolated directory with a pinned
   .vercel/project.json. (3) CI green on GitHub runners (lint+build+e2e).
+- 2026-10-21: launch — custom domain patrol-lab.ricothen.com added to the
+  Vercel project (CNAME verified instantly, TLS auto-issued, 200). Real
+  OPENAI_API_KEY wired as an encrypted project env (source: local project .env
+  file, validated against the OpenAI API before use); production redeploy
+  confirms usedMock=false on /api/llm/compile — the compiler now runs live.
