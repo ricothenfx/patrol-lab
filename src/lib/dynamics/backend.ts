@@ -71,6 +71,18 @@ export class DynamicsBackend implements LocoBackend {
     this.rig = null;
   }
 
+  /** deterministic mission start: reset physics to the canonical stance */
+  prepareRun(pose: Pose): void {
+    if (!this.ready) return;
+    this.engine.resetAt(pose.x, -pose.z, 0.62, pose.heading, STAND);
+    this.engine.forward();
+    this.phase = 0;
+    this.acc = 0;
+    this.walkT = 0;
+    this.lastRoll = 0;
+    this.applyPhysPose(this.engine.pose());
+  }
+
   arrive(): void {
     // no snap: the rigid body must walk the last centimeters itself
   }

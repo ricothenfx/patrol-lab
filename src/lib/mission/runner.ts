@@ -106,6 +106,7 @@ export class MissionRunner {
   run(): void {
     if (!this.mission || this.status === "RUNNING") return;
     if (this.status === "DONE") this.reset();
+    if (this.status === "IDLE") this.sim.prepareRun();
     this.status = "RUNNING";
     this.push(true);
   }
@@ -120,6 +121,7 @@ export class MissionRunner {
   step(): void {
     if (!this.mission || this.status === "RUNNING") return;
     if (this.status === "DONE") return;
+    if (this.status === "IDLE") this.sim.prepareRun();
     this.status = "PAUSED";
     this.stepping = true;
   }

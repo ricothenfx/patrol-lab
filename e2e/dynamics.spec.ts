@@ -7,8 +7,12 @@ import { setLocaleCookie } from "./support";
  * mission completes, findings logged, odometer reflects real motion, pose
  * stays finite, no page errors.
  */
+// video encoding steals frames from the physics loop on loaded runners —
+// the first attempt kept starving the mission into the timeout
+test.use({ video: "off" });
+
 test("dynamics (beta): physics switch + beta_patrol completes", async ({ page, baseURL }) => {
-  test.setTimeout(300_000);
+  test.setTimeout(540_000);
   const errors: string[] = [];
   page.on("pageerror", (err) => errors.push(String(err)));
 
@@ -27,7 +31,7 @@ test("dynamics (beta): physics switch + beta_patrol completes", async ({ page, b
   await page.getByTestId("preset-beta_patrol").click();
   await page.getByTestId("btn-run").click();
 
-  await expect(page.getByTestId("mission-status-pill")).toHaveText("DONE", { timeout: 240_000 });
+  await expect(page.getByTestId("mission-status-pill")).toHaveText("DONE", { timeout: 480_000 });
 
   const findingText = await page.getByTestId("finding-count").textContent();
   expect(findingText).toContain("2 findings");

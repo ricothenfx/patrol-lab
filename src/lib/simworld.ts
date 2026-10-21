@@ -44,6 +44,8 @@ export interface LocoBackend {
   detach(): void;
   /** arrival radius override (dynamics arcs need a wider capture window) */
   readonly arriveEps?: number;
+  /** deterministic mission start: pin physics to a canonical stance (dynamics) */
+  prepareRun?(pose: Pose): void;
   /** adopt the rig + current pose (switching modes must be seamless) */
   attach(rig: Rig, pose: Pose): void;
   tick(dt: number, cmd: LocoCmd): void;
@@ -290,6 +292,11 @@ export class SimWorld {
 
   setSpeedMult(m: number): void {
     this.speedMult = m;
+  }
+
+  /** called by the interpreter when a fresh mission starts running */
+  prepareRun(): void {
+    this.backend.prepareRun?.(this.pose);
   }
 
   beginScan(): void {
