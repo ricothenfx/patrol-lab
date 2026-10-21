@@ -12,7 +12,7 @@ export default async function Home() {
     <div className="app">
       <TopBar
         meta={t.home.meta}
-        right={<span className="status-pill status-idle">SIM KINEMATIC</span>}
+        right={<span className="status-pill status-idle">SIM</span>}
       />
 
       <main className="main">

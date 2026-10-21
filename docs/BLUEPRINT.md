@@ -15,6 +15,13 @@ code. UI labels the active mode honestly (`KINEMATIC` / `DYNAMICS`).
 Rationale: a standing RL/physics gait is a research task; a ship-able, honest demo is
 the product. The swap path stays open by construction.
 
+Status (Phase 7): shipped as `DYNAMICS (BETA)`. The official DeepMind WASM bindings
+(`@mujoco/mujoco`, served from `public/mujoco`) step the real ANYmal C MJCF on a flat
+physics floor; a CPG crawl-trot with empirical attitude/height/yaw feedback drives the
+position servos (src/lib/dynamics/). Honest limits: gentle heading arcs only, no learned
+policy — omnidirectional patrol and an MJX-trained policy stay future work. Falls
+auto-recover via in-place reset (logged in the mission log).
+
 ## ADR-03 — Rendering: three.js WebGL2 via R3F; WebGPU behind a flag
 R3F v9 + WebGL2 is the stable path (drei compatibility, integrated-GPU laptops).
 A `WEBGPU=1` runtime flag may switch `WebGPURenderer`; scene code stays

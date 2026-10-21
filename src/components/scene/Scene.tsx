@@ -20,6 +20,7 @@ function Ticker() {
       tris: () => gl.info.render.triangles,
       joints: () => sim.jointCount,
       mode: () => (orchestrator.runner.busy ? "mission" : sim.mode),
+      loc: () => sim.locMode,
       pose: () => sim.pose,
       orient: () => sim.orientation(),
     };

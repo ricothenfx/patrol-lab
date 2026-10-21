@@ -31,15 +31,19 @@ kinematics (labeled as such), 60 fps on an integrated laptop GPU.
 
 ## Status
 
-Phases 0–5 shipped (see docs/ROADMAP.md):
+Phases 0–7 shipped (see docs/ROADMAP.md):
 
 - MJCF-faithful ANYmal C rig — the MuJoCo mesh-COM offsets are baked from the
   real model (`scripts/bake_rig.py`); without them every visual geom drifts.
 - Mission DSL with line-accurate parser errors; debugger execution: run /
   pause / step / reset, playback 0.5–4×, seeded sensor readings (same seed →
   same findings, reproducible).
-- Kinematic trot gait + heading control, honest `KINEMATIC` label (dynamics via
-  MuJoCo WASM is the designed next step — see docs/BLUEPRINT.md ADR-02).
+- Kinematic trot gait + heading control, honest `KINEMATIC` label.
+- **DYNAMICS (BETA)**: one click switches on the real MuJoCo WASM engine
+  (official DeepMind bindings) stepping the actual ANYmal C MJCF on a physics
+  floor — real contacts, real body sway, physics-derived odometer, fall
+  auto-recovery. Gentle heading arcs only (sharp turns + learned policy are
+  documented future work, docs/BLUEPRINT.md ADR-02).
 - Control-room: telemetry KPI card (clock, odometer, coverage, findings,
   alerts), POI chips, tactical minimap, follow camera, scan FX.
 - LLM plugins (optional): NL → mission compiler and grounded inspection

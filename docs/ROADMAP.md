@@ -43,3 +43,17 @@ Each phase ends with: lint + build green, Playwright checks for affected flows,
 - Playwright suite (viewport, editor, mission run, dashboard, LLM mock).
 - README with reproducible numbers + demo GIF; Vercel deploy; DNS handoff notes.
 - **DoD:** production URL live, e2e green against production build.
+
+## Phase 7 — DYNAMICS (beta): real physics stepping (done, scoped)
+- MuJoCo WASM (official `@mujoco/mujoco` bindings served from `public/mujoco`) steps the
+  real ANYmal C MJCF on a flat physics floor; the three.js rig renders the result.
+- CPG crawl-trot controller with empirical attitude/height/yaw feedback
+  (src/lib/dynamics/); the headless tuning harness (scripts/dyn_harness.mjs) shares the
+  controller with the app, so harness-tuned parameters cannot drift.
+- Kill-switch per ADR-02: KINEMATIC stays the default; the viewport badge toggles
+  DYNAMICS (BETA) with a visible load state and falls back on failure.
+- Fall auto-recovery (in-place reset, logged as a warn event); physics-derived odometer.
+- **DoD:** e2e/dynamics.spec.ts — switch + beta_patrol completes at 4×, findings logged,
+  finite pose, odometer > 2 m, no page errors; lint+build green.
+- Honest limits (documented, not hidden): gentle heading arcs only; sharp turns and an
+  MJX-trained policy are future work.

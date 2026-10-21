@@ -15,6 +15,9 @@ const en = {
     assetsMeta: (done: number, total: number, pct: number) => `${done}/${total} assets · ${pct}%`,
     siteBadge: "SITE A · SUBSTATION SIM",
     camFollow: "◎ follow",
+    physicsLoading: "loading MuJoCo WASM physics…",
+    locToggleTitle: "switch locomotion mode (DYNAMICS = beta)",
+    locError: "physics init failed — staying KINEMATIC",
     camOrbit: "✥ orbit",
   },
   kpi: {

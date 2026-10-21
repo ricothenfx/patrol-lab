@@ -86,3 +86,15 @@ Phase 6 (hardening + launch) — done. Shipped: https://patrol-lab.vercel.app
   tag-filtered technical Q&A, 14 entries) sharing a PageShell; nav links in
   the topbar. e2e/theme.spec.ts: toggle flips + persists, tokens swap,
   FAQ expands, QA search/tag/empty-state.
+- 2026-10-21: Phase 7 — DYNAMICS (beta). MuJoCo WASM (official DeepMind bindings,
+  vendored to public/mujoco, Apache-2.0) steps the real ANYmal C MJCF on a flat floor;
+  the three.js rig renders the physics pose/joints (src/lib/dynamics/engine.ts). CPG
+  crawl-trot controller with empirically settled attitude/height/yaw feedback
+  (controller.ts; sign conventions measured via scripts/axis_probe.mjs, tuned via
+  scripts/dyn_harness.mjs which shares the controller with the app). Viewport badge
+  toggles KINEMATIC ↔ DYNAMICS (BETA) with a visible WASM/asset load state; failures
+  fall back to KINEMATIC (ADR-02 kill-switch). Falls auto-recover via in-place physics
+  reset and are logged in the mission log; odometer comes from real body displacement.
+  beta_patrol preset = gentle-arc demo (single POI, two inspections). Honest limits:
+  gentle heading arcs only; sharp turns + MJX-trained policy are future work.
+  e2e/dynamics.spec.ts covers switch → run → DONE at 4×; full suite green locally.

@@ -17,6 +17,9 @@ const zh: Dictionary = {
     assetsMeta: (done, total, pct) => `${done}/${total} 项资源 · ${pct}%`,
     siteBadge: "SITE A · 变电站仿真",
     camFollow: "◎ 跟随",
+    physicsLoading: "正在加载 MuJoCo WASM 物理…",
+    locToggleTitle: "切换运动模式（DYNAMICS = 测试版）",
+    locError: "物理初始化失败 — 保持 KINEMATIC",
     camOrbit: "✥ 环绕",
   },
   kpi: {

@@ -52,6 +52,20 @@ GOTO tank_farm
 INSPECT tank_farm THERMAL ALERT IF TEMP>60
 END`,
   },
+  {
+    id: "beta_patrol",
+    label: "beta_patrol · dynamics demo",
+    code: `# beta_patrol — gentle arc for the DYNAMICS (beta) mode.
+# The physics controller handles gentle heading changes; sharp
+# turns stay on the roadmap (ADR-02).
+MISSION beta_patrol
+
+SPEED 1.0
+GOTO pump_station
+INSPECT pump_station THERMAL ALERT IF TEMP>75
+INSPECT pump_station ACOUSTIC
+END`,
+  },
 ];
 
 /* --------------------------------------------------------------- language */

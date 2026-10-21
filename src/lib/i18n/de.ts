@@ -17,6 +17,9 @@ const de: Dictionary = {
     assetsMeta: (done, total, pct) => `${done}/${total} Assets · ${pct}%`,
     siteBadge: "SITE A · Umspannwerk-Sim",
     camFollow: "◎ folgen",
+    physicsLoading: "MuJoCo WASM wird geladen…",
+    locToggleTitle: "Physikmodus umschalten (DYNAMICS = Beta)",
+    locError: "Physik-Init fehlgeschlagen — KINEMATIK bleibt aktiv",
     camOrbit: "✥ Orbit",
   },
   kpi: {

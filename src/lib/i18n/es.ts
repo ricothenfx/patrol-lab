@@ -17,6 +17,9 @@ const es: Dictionary = {
     assetsMeta: (done, total, pct) => `${done}/${total} recursos · ${pct}%`,
     siteBadge: "SITE A · sim de subestación",
     camFollow: "◎ seguir",
+    physicsLoading: "cargando física MuJoCo WASM…",
+    locToggleTitle: "cambiar modo de locomoción (DYNAMICS = beta)",
+    locError: "fallo de inicialización — se mantiene KINEMATIC",
     camOrbit: "✥ orbitar",
   },
   kpi: {

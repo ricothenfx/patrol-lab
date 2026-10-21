@@ -499,6 +499,15 @@ body {
   backdrop-filter: blur(2px);
 }
 
+/* physics-engine switch: compact banner, keeps the scene visible */
+.viewport-overlay-thin {
+  justify-content: flex-end;
+  padding-bottom: 56px;
+  background: color-mix(in srgb, var(--bg-0) 45%, transparent);
+  backdrop-filter: none;
+  pointer-events: none;
+}
+
 .loading-title {
   font-family: var(--mono);
   font-size: 13px;

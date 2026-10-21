@@ -268,6 +268,14 @@ export class MissionRunner {
     const speed = this.sim.speedMult;
     this.clock += dt * speed;
     this.sim.tick(dt, speed);
+    if (this.sim.popReset()) {
+      this.log(
+        "alert",
+        this.stmts[this.stmtIndex]?.line ?? 0,
+        "physics reset — fall detected, controller recovered",
+        "warn",
+      );
+    }
     const stmt = this.stmts[this.stmtIndex];
     if (!stmt) return;
     this.stmtElapsed += dt * speed;

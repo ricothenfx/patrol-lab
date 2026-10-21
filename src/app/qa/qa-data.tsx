@@ -28,7 +28,7 @@ const deEntries: QaEntry[] = [
         Das Perf-Budget sind 60 fps auf einem Laptop mit integrierter GPU, und die gesamte Simulation
         läuft client-seitig. Eine MuJoCo-Dynamikschleife im Browser über der three.js-Renderloop
         sprengt dieses Budget — daher ein kinematischer Trab mit Heading-Regelung. Der Trade-off wird
-        in der UI genannt (<code>SIM KINEMATIC</code>), nicht versteckt — Ehrlichkeit statt Hype.
+        in der UI genannt (<code>KINEMATIC</code>, standardmäßig aktiv; <code>DYNAMICS (BETA)</code> schaltet die MuJoCo-WASM-Physik dazu), nicht versteckt — Ehrlichkeit statt Hype.
       </>
     ),
   },
@@ -236,7 +236,7 @@ const enEntries: QaEntry[] = [
         The perf budget is 60 fps on an integrated-GPU laptop, and the whole simulation runs
         client-side. A browser MuJoCo dynamics loop on top of the three.js render loop is outside
         that budget, so locomotion is a kinematic trot with heading control. The trade-off is stated
-        in the UI (<code>SIM KINEMATIC</code>) instead of hidden — honesty over hype.
+        in the UI (<code>KINEMATIC</code> by default; <code>DYNAMICS (BETA)</code> switches on the MuJoCo WASM physics) instead of hidden — honesty over hype.
       </>
     ),
   },
@@ -441,7 +441,7 @@ const zhEntries: QaEntry[] = [
       <>
         性能预算是集成 GPU 笔记本上的 60 fps，而且整个仿真都在客户端运行。在 three.js
         渲染循环之上再跑浏览器端 MuJoCo 动力学循环超出了预算，因此运动采用带航向控制的运动学小跑。
-        这一取舍在 UI 中明示（<code>SIM KINEMATIC</code>）而非隐藏——诚实优先于噱头。
+        这一取舍在 UI 中明示（默认 <code>KINEMATIC</code>；<code>DYNAMICS (BETA)</code> 开启 MuJoco WASM 物理）而非隐藏——诚实优先于噱头。
       </>
     ),
   },
@@ -630,7 +630,7 @@ const esEntries: QaEntry[] = [
         El presupuesto de rendimiento es 60 fps en un portátil con GPU integrada, y toda la
         simulación corre en el cliente. Un bucle de dinámica MuJoCo en el navegador sobre el render
         loop de three.js excede ese presupuesto, así que la locomoción es un trote cinemático con
-        control de rumbo. El compromiso se declara en la UI (<code>SIM KINEMATIC</code>) en vez de
+        control de rumbo. El compromiso se declara en la UI (<code>KINEMATIC</code> por defecto; <code>DYNAMICS (BETA)</code> activa la física MuJoCo WASM) en vez de
         ocultarse — honestidad antes que humo.
       </>
     ),

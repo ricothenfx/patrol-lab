@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useUi } from "@/state/store";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import { orchestrator } from "@/lib/orchestrator";
 import { KpiOverlay } from "@/components/dashboard/KpiOverlay";
 import { MiniMap } from "@/components/dashboard/MiniMap";
 
@@ -17,9 +18,15 @@ const Scene = dynamic(() => import("./scene/Scene"), {
 });
 
 export function Viewport() {
-  const { loadDone, loadTotal, viewportReady, simMode, camMode, setCamMode, snapshot } = useUi();
+  const { loadDone, loadTotal, viewportReady, simMode, locSwitching, locError, camMode, setCamMode, snapshot } = useUi();
   const t = useT();
   const pct = loadTotal > 0 ? Math.round((loadDone / loadTotal) * 100) : 0;
+
+  const toggleLoc = () => {
+    if (locSwitching) return;
+    const next = simMode === "KINEMATIC" ? "dynamics" : "kinematic";
+    void orchestrator.switchLocomotion(next);
+  };
 
   return (
     <section className="viewport" data-testid="viewport">
@@ -35,11 +42,28 @@ export function Viewport() {
         </div>
       )}
 
+      {locSwitching && (
+        <div className="viewport-overlay viewport-overlay-thin" data-testid="physics-loading">
+          <div className="loading-title">{t.viewport.physicsLoading}</div>
+          <div className="loading-bar">
+            <div className="loading-fill" style={{ width: `${pct}%` }} />
+          </div>
+        </div>
+      )}
+
       <div className="viewport-badge">
         <span className="badge-dot" />
         {t.viewport.siteBadge}
         <span className="badge-sep">·</span>
-        {simMode}
+        <button
+          className="cam-toggle"
+          data-testid="loc-toggle"
+          onClick={toggleLoc}
+          disabled={locSwitching}
+          title={t.viewport.locToggleTitle}
+        >
+          {simMode}
+        </button>
         <span className="badge-sep">·</span>
         <button
           className="cam-toggle"
@@ -49,6 +73,12 @@ export function Viewport() {
           {camMode === "follow" ? t.viewport.camFollow : t.viewport.camOrbit}
         </button>
       </div>
+
+      {locError && (
+        <div className="run-error" data-testid="loc-error">
+          {t.viewport.locError}
+        </div>
+      )}
 
       {viewportReady && (
         <>

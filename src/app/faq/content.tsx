@@ -54,7 +54,7 @@ const de: FaqPageContent = {
       q: "Ist das echte Physik?",
       a: (
         <>
-          Nein — und die UI sagt es ehrlich: Das Status-Tag zeigt <code>SIM KINEMATIC</code>. Der
+          Nein — und die UI sagt es ehrlich: Das Modus-Tag zeigt <code>KINEMATIC</code> — und per Klick gibt es <code>DYNAMICS (BETA)</code> mit echter MuJoCo-WASM-Physik. Der
           Roboter läuft in einem kinematischen Trabgang mit Heading-Regelung, angetrieben von einem
           Missionsinterpreter mit fester Schrittweite (120 Hz). Im Browser läuft keine
           Dynamik-Engine.
@@ -193,7 +193,7 @@ const en: FaqPageContent = {
       q: "Is it real physics?",
       a: (
         <>
-          No — and the UI says so truthfully: the status pill reads <code>SIM KINEMATIC</code>. The
+          No — and the UI says so truthfully: the mode badge reads <code>KINEMATIC</code> — and one click switches to <code>DYNAMICS (BETA)</code> with real MuJoCo WASM physics. The
           robot follows a kinematic trot gait with heading control, driven by a fixed-timestep
           (120 Hz) mission interpreter. No dynamics engine runs in the browser.
         </>
@@ -324,7 +324,7 @@ const zh: FaqPageContent = {
       q: "这是真实物理吗？",
       a: (
         <>
-          不是——UI 如实说明：状态徽标显示 <code>SIM KINEMATIC</code>
+          不是——UI 如实说明：模式徽标显示 <code>KINEMATIC</code>——一键切换到 <code>DYNAMICS (BETA)</code>，运行真实的 MuJoCo WASM 物理
           。机器人以带航向控制的运动学小跑步态移动，由固定步长（120 Hz）的任务解释器驱动。浏览器中不运行动力学引擎。
         </>
       ),
@@ -453,7 +453,7 @@ const es: FaqPageContent = {
       q: "¿Es física real?",
       a: (
         <>
-          No — y la UI lo dice con honestidad: la pastilla de estado muestra <code>SIM KINEMATIC</code>.
+          No — y la UI lo dice con honestidad: la etiqueta de modo muestra <code>KINEMATIC</code> — y un clic cambia a <code>DYNAMICS (BETA)</code> con física real MuJoCo WASM.
           El robot sigue un trote cinemático con control de rumbo, impulsado por un intérprete de
           misión de paso fijo (120 Hz). No hay motor de dinámica en el navegador.
         </>
