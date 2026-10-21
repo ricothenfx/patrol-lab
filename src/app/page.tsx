@@ -3,18 +3,21 @@ import { TopBar } from "@/components/TopBar";
 import { MissionEditor } from "@/components/editor/MissionEditor";
 import { MissionControls } from "@/components/editor/MissionControls";
 import { NlCompileBar, ReportPanel } from "@/components/editor/AiTools";
+import { resolveLocale } from "@/lib/i18n/server";
+import { DICT } from "@/lib/i18n";
 
-export default function Home() {
+export default async function Home() {
+  const t = DICT[await resolveLocale()];
   return (
     <div className="app">
       <TopBar
-        meta="mission control for autonomous inspection robots"
+        meta={t.home.meta}
         right={<span className="status-pill status-idle">SIM KINEMATIC</span>}
       />
 
       <main className="main">
         <aside className="pane-left" data-testid="editor-pane">
-          <div className="pane-title">MISSION EDITOR</div>
+          <div className="pane-title">{t.home.paneTitle}</div>
           <div className="editor-host-wrap">
             <MissionEditor />
           </div>
@@ -27,9 +30,9 @@ export default function Home() {
       </main>
 
       <footer className="statusbar">
-        <span>rig: ANYmal C (MuJoCo Menagerie, BSD-3)</span>
+        <span>{t.home.footerRig}</span>
         <span className="statusbar-sep">·</span>
-        <span>deterministic sim — same seed, same readings</span>
+        <span>{t.home.footerSim}</span>
         <span className="statusbar-right">patrol-lab v0.1</span>
       </footer>
     </div>

@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useUi } from "@/state/store";
 import { orchestrator } from "@/lib/orchestrator";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { PRESETS, runCurrentMission, pauseMission, stepMission, resetMission, setEditorDoc } from "./MissionEditor";
 
 const STATUS_CLASS: Record<string, string> = {
@@ -19,6 +20,7 @@ function fmtClock(s: number): string {
 }
 
 export function MissionControls() {
+  const t = useT();
   const snapshot = useUi((s) => s.snapshot);
   const seed = useUi((s) => s.seed);
   const setSeed = useUi((s) => s.setSeed);
@@ -39,30 +41,35 @@ export function MissionControls() {
 
   const onRun = () => {
     const res = runCurrentMission();
-    setRunError(res.ok ? null : (res.error ?? "cannot start"));
+    setRunError(res.ok ? null : t.errors.parseErrors(res.parseErrors ?? 0));
     if (res.ok) useUi.getState().setCamMode("follow");
+  };
+
+  const onStep = () => {
+    const res = stepMission();
+    setRunError(res.ok ? null : t.errors.parseErrors(res.parseErrors ?? 0));
   };
 
   return (
     <div className="mission-controls" data-testid="mission-controls">
       <div className="mc-row">
         <button className="btn btn-run" data-testid="btn-run" onClick={onRun} disabled={status === "RUNNING"}>
-          ▶ run
+          {t.controls.run}
         </button>
         <button className="btn" data-testid="btn-pause" onClick={pauseMission} disabled={status !== "RUNNING"}>
-          ⏸ pause
+          {t.controls.pause}
         </button>
-        <button className="btn" data-testid="btn-step" onClick={stepMission} disabled={status === "RUNNING" || status === "DONE"}>
-          ⇥ step
+        <button className="btn" data-testid="btn-step" onClick={onStep} disabled={status === "RUNNING" || status === "DONE"}>
+          {t.controls.step}
         </button>
         <button className="btn" data-testid="btn-reset" onClick={resetMission}>
-          ↺ reset
+          {t.controls.reset}
         </button>
       </div>
 
       <div className="mc-row mc-row-meta">
         <label className="field">
-          <span>seed</span>
+          <span>{t.controls.seed}</span>
           <input
             type="number"
             min={0}
@@ -73,7 +80,7 @@ export function MissionControls() {
           />
         </label>
         <label className="field">
-          <span>playback</span>
+          <span>{t.controls.playback}</span>
           <select
             value={playback}
             data-testid="playback-select"
@@ -116,25 +123,27 @@ export function MissionControls() {
         </span>
         <span className="ms-name">{snapshot?.missionName || "—"}</span>
         <span className="ms-meta">
-          line <b data-testid="current-line">{snapshot?.currentLine ?? "—"}</b>
+          {t.controls.line} <b data-testid="current-line">{snapshot?.currentLine ?? "—"}</b>
         </span>
         <span className="ms-meta">
-          stmt {snapshot ? `${Math.min(snapshot.stmtIndex + 1, snapshot.stmtCount)}/${snapshot.stmtCount}` : "—"}
+          {t.controls.stmt} {snapshot ? `${Math.min(snapshot.stmtIndex + 1, snapshot.stmtCount)}/${snapshot.stmtCount}` : "—"}
         </span>
         <span className="ms-meta">
           t <b data-testid="mission-clock">{fmtClock(snapshot?.missionClock ?? 0)}</b>
         </span>
-        <span className="ms-meta">phase {snapshot?.phase ?? "idle"}</span>
+        <span className="ms-meta">
+          {t.controls.phase} {snapshot?.phase ?? "idle"}
+        </span>
         <span className="ms-meta ms-alerts" data-testid="alert-count">
           ⚠ {alerts}
         </span>
         <span className="ms-meta" data-testid="finding-count">
-          ◈ {findings.length} findings
+          {t.controls.findingsCount(findings.length)}
         </span>
       </div>
 
       <div className="event-log" ref={logRef} data-testid="event-log">
-        {events.length === 0 && <div className="event-empty">mission log — run a mission to see events</div>}
+        {events.length === 0 && <div className="event-empty">{t.controls.emptyLog}</div>}
         {events
           .slice()
           .reverse()

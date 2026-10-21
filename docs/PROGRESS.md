@@ -64,6 +64,17 @@ Phase 6 (hardening + launch) — done. Shipped: https://patrol-lab.vercel.app
   OPENAI_API_KEY wired as an encrypted project env (source: local project .env
   file, validated against the OpenAI API before use); production redeploy
   confirms usedMock=false on /api/llm/compile — the compiler now runs live.
+- 2026-10-21: i18n (ADR-07) — four UI locales: German (default), English,
+  Chinese, Spanish. Locale lives in the `patrol-lab-locale` cookie; the server
+  resolves it for SSR (`<html lang>`, topbar/footer, FAQ/QA content) and
+  LocaleProvider mirrors it client-side; topbar switcher (DE/EN/中文/ES)
+  persists + `router.refresh()` for server text — no URL routing. Dictionary
+  (`src/lib/i18n/`, typed against en) covers app shell + controls; FAQ/QA ship
+  full per-locale content (11 + 14 entries × 4). Protocol words stay English
+  (status vocabulary, DSL, MOCK/LLM/RULE-BASED, presets) per honesty policy.
+  e2e: text-dependent specs pin `en` via cookie helper (e2e/support.ts); new
+  e2e/i18n.spec.ts asserts German default, switch + persistence, and locale
+  follow-through on content pages.
 - 2026-10-21: light/dark theme + Q&A and FAQ pages. Theme = `data-theme` on
   `<html>` with two token sets in globals.css (dark stays default; light value
   set darkened for contrast); inline pre-paint script resolves localStorage →

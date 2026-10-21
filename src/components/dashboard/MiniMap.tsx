@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { sim } from "@/lib/simworld";
 import { POIS } from "@/lib/site";
 import { orchestrator } from "@/lib/orchestrator";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 const MAP_R = 74; // px
 const SITE_R = 6.2; // world units mapped to MAP_R
@@ -18,6 +19,7 @@ function toPx(x: number, z: number): [number, number] {
  * runner snapshot. All positions are real simulation state.
  */
 export function MiniMap() {
+  const t = useT();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -102,7 +104,7 @@ export function MiniMap() {
 
   return (
     <div className="minimap" data-testid="minimap">
-      <div className="minimap-title">SITE A · TAC MAP</div>
+      <div className="minimap-title">{t.minimap.title}</div>
       <canvas ref={canvasRef} style={{ width: MAP_R * 2, height: MAP_R * 2 }} />
     </div>
   );

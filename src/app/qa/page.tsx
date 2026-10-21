@@ -1,6 +1,7 @@
-import Link from "next/link";
 import { PageShell } from "@/components/PageShell";
+import { resolveLocale } from "@/lib/i18n/server";
 import { QaExplorer } from "./QaExplorer";
+import { QA_PAGE } from "./qa-data";
 
 export const metadata = {
   title: "Q&A · patrol-lab",
@@ -8,22 +9,16 @@ export const metadata = {
     "Technical Q&A about patrol-lab: the kinematic gait, the 120 Hz interpreter, the LLM boundary, rig baking, determinism and the honest-numbers policy.",
 };
 
-export default function QaPage() {
+export default async function QaPage() {
+  const c = QA_PAGE[await resolveLocale()];
   return (
     <PageShell active="qa">
       <article className="doc">
         <p className="doc-kicker">PATROL-LAB · Q&amp;A</p>
-        <h1 className="doc-title">Technical questions &amp; answers</h1>
-        <p className="doc-intro">
-          How the simulation, mission DSL, determinism and LLM plugins actually work — searchable
-          and filterable by tag. For product-level questions, see the{" "}
-          <Link href="/faq">FAQ</Link>.
-        </p>
+        <h1 className="doc-title">{c.title}</h1>
+        <p className="doc-intro">{c.intro}</p>
         <QaExplorer />
-        <p className="doc-crosslink">
-          Looking for the basics? Read the <Link href="/faq">FAQ</Link> — or go back to{" "}
-          <Link href="/">mission control</Link>.
-        </p>
+        <p className="doc-crosslink">{c.crosslink}</p>
       </article>
     </PageShell>
   );

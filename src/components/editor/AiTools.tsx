@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useUi } from "@/state/store";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { setEditorDoc } from "./MissionEditor";
 import type { CompileResult } from "@/lib/llm/prompts";
 import type { ReportData } from "@/app/api/llm/report/route";
@@ -14,6 +15,7 @@ import type { ReportData } from "@/app/api/llm/report/route";
  */
 
 export function NlCompileBar() {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [prompt, setPrompt] = useState("");
   const [busy, setBusy] = useState(false);
@@ -41,7 +43,7 @@ export function NlCompileBar() {
     <div className="nl-bar" data-testid="nl-bar">
       {!open && (
         <button className="btn btn-nl" data-testid="nl-open" onClick={() => setOpen(true)}>
-          ✎ describe mission (NL → DSL)
+          {t.nl.open}
         </button>
       )}
       {open && (
@@ -50,7 +52,7 @@ export function NlCompileBar() {
             <input
               className="nl-input"
               data-testid="nl-input"
-              placeholder="e.g. gas watch on the valve manifold, then thermal on the tanks"
+              placeholder={t.nl.placeholder}
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               onKeyDown={(e) => {
@@ -58,7 +60,7 @@ export function NlCompileBar() {
               }}
             />
             <button className="btn btn-run" data-testid="nl-compile" onClick={() => void compile()} disabled={busy || !prompt.trim()}>
-              {busy ? "…" : "compile"}
+              {busy ? "…" : t.nl.compile}
             </button>
             <button className="btn" data-testid="nl-close" onClick={() => { setOpen(false); setPreview(null); }}>
               ×
@@ -70,7 +72,7 @@ export function NlCompileBar() {
                 <>
                   <div className="nl-preview-head">
                     <span className="nl-badge">{preview.usedMock ? "MOCK" : "LLM"}</span>
-                    <span className="nl-note">proposed mission — review, then accept</span>
+                    <span className="nl-note">{t.nl.proposed}</span>
                     <button
                       className="btn btn-run"
                       data-testid="nl-accept"
@@ -81,10 +83,10 @@ export function NlCompileBar() {
                         setPreview(null);
                       }}
                     >
-                      ✓ accept
+                      {t.nl.accept}
                     </button>
                     <button className="btn" data-testid="nl-discard" onClick={() => setPreview(null)}>
-                      discard
+                      {t.nl.discard}
                     </button>
                   </div>
                   <pre className="nl-code">{preview.code}</pre>
@@ -101,6 +103,7 @@ export function NlCompileBar() {
 }
 
 export function ReportPanel() {
+  const t = useT();
   const snapshot = useUi((s) => s.snapshot);
   const [busy, setBusy] = useState(false);
   const [report, setReport] = useState<ReportData | null>(null);
@@ -132,7 +135,7 @@ export function ReportPanel() {
       });
       const json = (await res.json()) as { ok: boolean; report?: ReportData; error?: string };
       if (json.ok && json.report) setReport(json.report);
-      else setError(json.error ?? "report failed");
+      else setError(json.error ?? t.report.failed);
     } catch (err) {
       setError(String(err).slice(0, 120));
     } finally {
@@ -143,14 +146,14 @@ export function ReportPanel() {
   return (
     <div className="report-panel" data-testid="report-panel">
       <button className="btn btn-preset" data-testid="report-generate" onClick={() => void generate()} disabled={!done || busy}>
-        {busy ? "…" : done ? "⇒ generate inspection report" : "report (run a mission first)"}
+        {busy ? "…" : done ? t.report.generate : t.report.needsRun}
       </button>
       {error && <div className="run-error">{error}</div>}
       {report && (
         <div className="report-body" data-testid="report-body">
           <div className="nl-preview-head">
             <span className="nl-badge">{report.usedMock ? "RULE-BASED" : "LLM"}</span>
-            <span className="nl-note">grounded in the mission log</span>
+            <span className="nl-note">{t.report.grounded}</span>
           </div>
           <p className="report-summary">{report.summary}</p>
           <ul className="report-recs">

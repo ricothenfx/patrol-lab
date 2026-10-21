@@ -231,11 +231,11 @@ export function MissionEditor() {
 
 /* --------------------------------------------------------------- actions */
 
-export function runCurrentMission(): { ok: boolean; error?: string } {
+export function runCurrentMission(): { ok: boolean; parseErrors?: number } {
   const { editorText } = useUi.getState();
   const res = parseMission(editorText);
   if (!res.ok) {
-    return { ok: false, error: `${res.errors.length} parse error(s) — see highlighted lines` };
+    return { ok: false, parseErrors: res.errors.length };
   }
   orchestrator.runner.load(res.mission, useUi.getState().seed);
   orchestrator.runner.run();
@@ -246,18 +246,17 @@ export function pauseMission(): void {
   orchestrator.runner.pause();
 }
 
-export function stepMission(): void {
+export function stepMission(): { ok: boolean; parseErrors?: number } {
   const runner = orchestrator.runner;
   if (!runner.hasMission || runner.status === "DONE") {
     const res = parseMission(useUi.getState().editorText);
     if (!res.ok) {
-      useUi.getState().setRunError(`${res.errors.length} parse error(s) — see highlighted lines`);
-      return;
+      return { ok: false, parseErrors: res.errors.length };
     }
-    useUi.getState().setRunError(null);
     runner.load(res.mission, useUi.getState().seed);
   }
   runner.step();
+  return { ok: true };
 }
 
 export function resetMission(): void {

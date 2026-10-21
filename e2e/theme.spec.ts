@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { setLocaleCookie } from "./support";
 
 test("theme toggle flips data-theme and persists across reload", async ({ page }) => {
   await page.goto("/");
@@ -40,7 +41,9 @@ test("light theme actually changes surface tokens", async ({ page }) => {
   expect(before).not.toBe(after);
 });
 
-test("FAQ page renders questions with expandable answers", async ({ page }) => {
+test("FAQ page renders questions with expandable answers", async ({ page, baseURL }) => {
+  // UI text assertions are locale-specific — pin English
+  await setLocaleCookie(page, "en", baseURL);
   await page.goto("/faq");
   await expect(page).toHaveTitle(/FAQ · patrol-lab/);
 
@@ -57,7 +60,9 @@ test("FAQ page renders questions with expandable answers", async ({ page }) => {
   await expect(page.locator(".doc-crosslink").getByRole("link", { name: "Q&A" })).toBeVisible();
 });
 
-test("Q&A page searches and filters by tag", async ({ page }) => {
+test("Q&A page searches and filters by tag", async ({ page, baseURL }) => {
+  // UI text assertions are locale-specific — pin English
+  await setLocaleCookie(page, "en", baseURL);
   await page.goto("/qa");
   await expect(page).toHaveTitle(/Q&A · patrol-lab/);
 

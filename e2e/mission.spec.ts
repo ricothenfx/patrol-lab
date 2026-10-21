@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { setLocaleCookie } from "./support";
 
 async function waitForRobot(page: Page) {
   await expect(page.getByTestId("viewport-ready")).toBeAttached({ timeout: 90_000 });
@@ -8,11 +9,13 @@ async function noPageErrors(page: Page, errors: string[]) {
   expect(errors, "page errors: " + errors.join(" | ")).toEqual([]);
 }
 
-test("golden mission runs end-to-end: DONE, findings logged, robot moved", async ({ page }) => {
+test("golden mission runs end-to-end: DONE, findings logged, robot moved", async ({ page, baseURL }) => {
   test.setTimeout(180_000); // full mission at 4x + asset load on a 4-core host
   const pageErrors: string[] = [];
   page.on("pageerror", (err) => pageErrors.push(String(err)));
 
+  // UI text assertions ("4 findings") are locale-specific — pin English
+  await setLocaleCookie(page, "en", baseURL);
   await page.goto("/");
   await waitForRobot(page);
 
@@ -54,10 +57,11 @@ test("golden mission runs end-to-end: DONE, findings logged, robot moved", async
   await page.screenshot({ path: "test-results/artifacts/mission-done.png" });
 });
 
-test("invalid mission surfaces parse errors and refuses to run", async ({ page }) => {
+test("invalid mission surfaces parse errors and refuses to run", async ({ page, baseURL }) => {
   const pageErrors: string[] = [];
   page.on("pageerror", (err) => pageErrors.push(String(err)));
 
+  await setLocaleCookie(page, "en", baseURL);
   await page.goto("/");
   await waitForRobot(page);
 
@@ -79,8 +83,7 @@ test("step mode advances one line at a time while paused", async ({ page }) => {
   const pageErrors: string[] = [];
   page.on("pageerror", (err) => pageErrors.push(String(err)));
 
-  await page.goto("/");
-  await waitForRobot(page);
+  await page.goto("/");  await waitForRobot(page);
 
   await page.getByTestId("preset-patrol_alpha").click();
   await page.getByTestId("btn-step").click();

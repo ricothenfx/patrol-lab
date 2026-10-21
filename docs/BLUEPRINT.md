@@ -33,3 +33,15 @@ execution. Errors carry line/column. Deterministic execution given (mission, see
 Routes call OpenAI only when `OPENAI_API_KEY` is set; `MOCK_MODE=1` (or missing key)
 returns pre-baked artifacts. Every LLM output is schema/parser-validated with a
 bounded retry loop, then shown as a reviewable diff — never auto-trusted.
+
+## ADR-07 — UI languages: cookie-based locale, German default
+Four UI locales — German (default), English, Chinese, Spanish — chosen with the
+topbar switcher and persisted in the `patrol-lab-locale` cookie. The server reads
+the cookie (`resolveLocale()`) so SSR, `<html lang>` and hydration always agree;
+`LocaleProvider` mirrors it for client components and `router.refresh()` swaps
+server-rendered text. No `[locale]` URL routing: the control room is an app, not
+a content tree, and existing URLs/SEO stay stable. FAQ/QA content lives in
+per-locale content modules. Protocol vocabulary stays English everywhere (status
+words IDLE/RUNNING/PAUSED/DONE/FAULT, DSL keywords, MOCK/LLM/RULE-BASED badges,
+preset names) so the honesty labels remain consistent across languages; the
+server-generated inspection report is likewise an English artifact.

@@ -1,20 +1,24 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { QA_ENTRIES, QA_TAGS, type QaTag } from "./qa-data";
+import { useLocale, useT } from "@/lib/i18n/LocaleProvider";
+import { QA_CONTENT, QA_TAGS, QA_TAG_LABELS, type QaTag } from "./qa-data";
 
 export function QaExplorer() {
+  const t = useT();
+  const { locale } = useLocale();
+  const entries = QA_CONTENT[locale];
   const [query, setQuery] = useState("");
   const [tag, setTag] = useState<QaTag | null>(null);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return QA_ENTRIES.filter((e) => {
+    return entries.filter((e) => {
       if (tag && !e.tags.includes(tag)) return false;
       if (!q) return true;
       return e.q.toLowerCase().includes(q) || textOf(e.a).includes(q);
     });
-  }, [query, tag]);
+  }, [entries, query, tag]);
 
   return (
     <>
@@ -23,12 +27,12 @@ export function QaExplorer() {
           className="qa-search"
           data-testid="qa-search"
           type="search"
-          placeholder="search questions and answers…"
+          placeholder={t.qa.searchPlaceholder}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
         <span className="qa-count" data-testid="qa-count">
-          {results.length}/{QA_ENTRIES.length} answered
+          {t.qa.answered(results.length, entries.length)}
         </span>
       </div>
 
@@ -37,15 +41,15 @@ export function QaExplorer() {
           className={tag === null ? "qa-tag active" : "qa-tag"}
           onClick={() => setTag(null)}
         >
-          all
+          {t.qa.all}
         </button>
-        {QA_TAGS.map((t) => (
+        {QA_TAGS.map((tg) => (
           <button
-            key={t}
-            className={tag === t ? "qa-tag active" : "qa-tag"}
-            onClick={() => setTag(tag === t ? null : t)}
+            key={tg}
+            className={tag === tg ? "qa-tag active" : "qa-tag"}
+            onClick={() => setTag(tag === tg ? null : tg)}
           >
-            {t}
+            {QA_TAG_LABELS[locale][tg]}
           </button>
         ))}
       </div>
@@ -56,9 +60,9 @@ export function QaExplorer() {
             <h3 className="qa-q">{e.q}</h3>
             <p className="qa-a">{e.a}</p>
             <div className="qa-card-tags">
-              {e.tags.map((t) => (
-                <span key={t} className="qa-card-tag">
-                  {t}
+              {e.tags.map((tg) => (
+                <span key={tg} className="qa-card-tag">
+                  {QA_TAG_LABELS[locale][tg]}
                 </span>
               ))}
             </div>
@@ -66,8 +70,7 @@ export function QaExplorer() {
         ))}
         {results.length === 0 && (
           <div className="qa-empty" data-testid="qa-empty">
-            no question matches “{query}”{tag ? ` in ${tag}` : ""} — try a different term or clear
-            the tag filter.
+            {t.qa.empty(query, tag ? QA_TAG_LABELS[locale][tag] : null)}
           </div>
         )}
       </div>
@@ -75,8 +78,7 @@ export function QaExplorer() {
   );
 }
 
-/** Flatten a ReactNode answer to plain text so search covers the answers. */
-function textOf(node: React.ReactNode): string {
+/** Flatten a ReactNode answer to plain text so search covers the answers. */function textOf(node: React.ReactNode): string {
   if (node == null || typeof node === "boolean") return "";
   if (typeof node === "string" || typeof node === "number") return String(node);
   if (Array.isArray(node)) return node.map(textOf).join(" ");
