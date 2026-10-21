@@ -9,16 +9,19 @@ export default defineConfig({
   reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : [["list"]],
   outputDir: "test-results",
   use: {
-    baseURL: "http://127.0.0.1:3031",
+    // E2E_BASE_URL=https://patrol-lab.vercel.app npx playwright test  -> run against production
+    baseURL: process.env.E2E_BASE_URL || "http://127.0.0.1:3031",
     viewport: { width: 1600, height: 900 },
     video: "retain-on-failure",
   },
-  webServer: {
-    // port 3031 registered in ~/PORTS.md (patrol-lab dev/test) — never 3000,
-    // that host runs other production stacks
-    command: "npx next start -p 3031",
-    url: "http://127.0.0.1:3031",
-    timeout: 120_000,
-    reuseExistingServer: !process.env.CI,
-  },
+  webServer: process.env.E2E_BASE_URL
+    ? undefined
+    : {
+        // port 3031 registered in ~/PORTS.md (patrol-lab dev/test) — never 3000,
+        // that host runs other production stacks
+        command: "npx next start -p 3031",
+        url: "http://127.0.0.1:3031",
+        timeout: 120_000,
+        reuseExistingServer: !process.env.CI,
+      },
 });

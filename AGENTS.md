@@ -47,6 +47,9 @@ Development must rely on these documents, never on chat history.
   `npx playwright test` for affected flows. Always clean-build (`rm -rf .next`)
   when a source change "mysteriously" does not appear — the Turbopack incremental
   cache has served stale modules before. Phases are only complete after push.
+  NEVER run the full e2e suite against the production URL — the traffic burst
+  trips Vercel's automatic Security Checkpoint and blocks real visitors for a
+  while. Use `E2E_BASE_URL` for at most one smoke pass when truly needed.
 - **Commits:** conventional commits (`feat|fix|docs|chore|refactor|test(scope): msg`).
   One commit (or more) per phase, pushed; `docs/PROGRESS.md` updated in the same push.
 

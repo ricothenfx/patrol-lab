@@ -39,7 +39,7 @@ Each phase ends with: lint + build green, Playwright checks for affected flows,
 - **DoD:** without API key UI shows nothing broken; with key, compile→run works;
   invalid LLM output is rejected by parser and retried then surfaced honestly.
 
-## Phase 6 — Hardening + launch
+## Phase 6 — Hardening + launch (done)
 - Playwright suite (viewport, editor, mission run, dashboard, LLM mock).
 - README with reproducible numbers + demo GIF; Vercel deploy; DNS handoff notes.
 - **DoD:** production URL live, e2e green against production build.

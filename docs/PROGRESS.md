@@ -1,7 +1,7 @@
 # PROGRESS — patrol-lab
 
 ## Status
-Phase: 5 (LLM plugins) — done. Next: Phase 6 (hardening + launch).
+Phase 6 (hardening + launch) — done. Shipped: https://patrol-lab.vercel.app
 
 ## Log
 - 2026-10-21: P0 — scaffold (Next 16 + R3F 9 + CodeMirror 6 + zustand), vendored
@@ -50,3 +50,12 @@ Phase: 5 (LLM plugins) — done. Next: Phase 6 (hardening + launch).
   report panel. e2e/llm.spec.ts covers mock compile->accept->run->report.
   Orientation regression spec added (holder-frame guard). Lint clean
   (react-hooks/immutability disabled only in three.js-imperative files).
+- 2026-10-21: P6 — production deploy on Vercel (project patrol-lab). Verified
+  public 200 + mock API + rig.json. Notes for ops: (1) never run the full e2e
+  suite against production — the traffic burst trips Vercel's automatic
+  Security Checkpoint for the source IP (decays on its own; browsers pass the
+  JS challenge); E2E_BASE_URL exists for a single smoke run when needed.
+  (2) A first deploy accidentally targeted the parent folder's linked project
+  ("portfolio") — rolled back to the previous production deployment and
+  re-deployed explicitly from an isolated directory with a pinned
+  .vercel/project.json. (3) CI green on GitHub runners (lint+build+e2e).
