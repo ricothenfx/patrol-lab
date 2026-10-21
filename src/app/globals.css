@@ -10,8 +10,43 @@
   --warn: #ffb454;
   --alert: #ff5d5d;
   --info: #57b6ff;
+  --code-keyword: #57b6ff;
+  --code-atom: #35e0a1;
+  --code-number: #ffb454;
+  --code-comment: #5c6a7e;
+  --code-operator: #ff9db1;
+  --code-variable: #c9d6e8;
+  --code-gutter: #3c4a5e;
+  --selection: color-mix(in srgb, var(--accent) 24%, transparent);
   --mono: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
   --sans: system-ui, "Inter", "Segoe UI", sans-serif;
+  color-scheme: dark;
+}
+
+/* ---------- light theme (data-theme="light") ----------
+   Daylight control room: same structure, inverted values.
+   The 3D viewport and minimap canvas stay dark in both themes —
+   they are the "monitor feeds" of the console. */
+:root[data-theme="light"] {
+  --bg-0: #eef1f5;
+  --bg-1: #f7f9fb;
+  --bg-2: #e4e9ef;
+  --line: #ccd4de;
+  --text-0: #17202e;
+  --text-1: #3d4c61;
+  --text-2: #66788f;
+  --accent: #0c9d68;
+  --warn: #b26a00;
+  --alert: #d43f3f;
+  --info: #1668b8;
+  --code-keyword: #1668b8;
+  --code-atom: #0c9d68;
+  --code-number: #b26a00;
+  --code-comment: #8a97a8;
+  --code-operator: #a83a67;
+  --code-variable: #2c3b52;
+  --code-gutter: #9aa7b8;
+  color-scheme: light;
 }
 
 * {
@@ -95,6 +130,38 @@ body {
   color: var(--accent);
 }
 
+.topbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nav-link {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--text-2);
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 3px 9px;
+  transition: color 120ms, border-color 120ms;
+}
+
+.nav-link:hover {
+  color: var(--text-0);
+  border-color: var(--line);
+}
+
+.nav-link.active {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+}
+
+.theme-toggle {
+  flex: 0 0 auto;
+}
+
 /* ---------- layout ---------- */
 .main {
   display: grid;
@@ -141,7 +208,7 @@ body {
 }
 
 .cm-mission-active {
-  background: rgba(53, 224, 161, 0.14);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
   box-shadow: inset 2px 0 0 var(--accent);
 }
 
@@ -751,4 +818,270 @@ body {
   font-size: 12px;
   line-height: 1.6;
   color: var(--text-1);
+}
+
+/* ---------- content pages (Q&A / FAQ) ----------
+   The app shell keeps html/body overflow:hidden, so content
+   pages own their scrolling via .page-body. */
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+}
+
+.page-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.doc {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 36px 20px 72px;
+}
+
+.doc-kicker {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--text-2);
+  margin: 0 0 6px;
+}
+
+.doc-title {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0 0 10px;
+  color: var(--text-0);
+}
+
+.doc-intro {
+  color: var(--text-1);
+  line-height: 1.65;
+  margin: 0 0 28px;
+}
+
+.doc-crosslink {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--text-2);
+  margin-top: 26px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.doc-crosslink a {
+  color: var(--info);
+  text-decoration: none;
+}
+
+.doc-crosslink a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- FAQ accordion ---------- */
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.faq-item {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg-1);
+}
+
+.faq-item summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 11px 14px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-0);
+  user-select: none;
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item summary::before {
+  content: "+";
+  font-family: var(--mono);
+  color: var(--accent);
+  flex: 0 0 12px;
+}
+
+.faq-item[open] summary::before {
+  content: "−";
+}
+
+.faq-item summary:hover {
+  color: var(--accent);
+}
+
+.faq-answer {
+  padding: 0 14px 13px 36px;
+  color: var(--text-1);
+  line-height: 1.65;
+  font-size: 13px;
+}
+
+.faq-answer code {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--accent);
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+/* ---------- Q&A explorer ---------- */
+.qa-toolbar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.qa-search {
+  flex: 1 1 240px;
+  background: var(--bg-2);
+  color: var(--text-0);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 7px 10px;
+}
+
+.qa-search:focus {
+  outline: none;
+  border-color: var(--info);
+}
+
+.qa-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.qa-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-2);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 3px 10px;
+  cursor: pointer;
+  transition: color 120ms, border-color 120ms;
+}
+
+.qa-tag:hover {
+  color: var(--text-0);
+  border-color: var(--text-2);
+}
+
+.qa-tag.active {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+.qa-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.qa-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg-1);
+  padding: 13px 15px;
+}
+
+.qa-q {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0 0 7px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-0);
+}
+
+.qa-q::before {
+  content: "Q";
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--line));
+  border-radius: 4px;
+  padding: 0 5px;
+  flex: 0 0 auto;
+}
+
+.qa-a {
+  margin: 0;
+  color: var(--text-1);
+  line-height: 1.65;
+  font-size: 13px;
+}
+
+.qa-a code {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--accent);
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+.qa-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.qa-card-tag {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 1px 7px;
+}
+
+.qa-empty {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-2);
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  padding: 18px;
+  text-align: center;
+}
+
+.qa-count {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-2);
+  margin-left: auto;
 }

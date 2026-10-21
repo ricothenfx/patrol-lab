@@ -64,3 +64,14 @@ Phase 6 (hardening + launch) — done. Shipped: https://patrol-lab.vercel.app
   OPENAI_API_KEY wired as an encrypted project env (source: local project .env
   file, validated against the OpenAI API before use); production redeploy
   confirms usedMock=false on /api/llm/compile — the compiler now runs live.
+- 2026-10-21: light/dark theme + Q&A and FAQ pages. Theme = `data-theme` on
+  `<html>` with two token sets in globals.css (dark stays default; light value
+  set darkened for contrast); inline pre-paint script resolves localStorage →
+  OS prefers-color-scheme → dark; ThemeToggle in the shared TopBar persists the
+  choice. CodeMirror theme + highlight style now consume the same CSS vars
+  (dark flag dropped; explicit var-based selection). 3D viewport, POI labels
+  and canvas minimap intentionally stay dark in both themes (monitor feeds).
+  New pages: /faq (11-question `<details>` accordion) and /qa (searchable,
+  tag-filtered technical Q&A, 14 entries) sharing a PageShell; nav links in
+  the topbar. e2e/theme.spec.ts: toggle flips + persists, tokens swap,
+  FAQ expands, QA search/tag/empty-state.

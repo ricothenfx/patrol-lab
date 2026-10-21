@@ -98,12 +98,12 @@ const missionLanguage = StreamLanguage.define({
 });
 
 const missionHighlight = HighlightStyle.define([
-  { tag: t.keyword, color: "#57b6ff", fontWeight: "600" },
-  { tag: t.atom, color: "#35e0a1" },
-  { tag: t.number, color: "#ffb454" },
-  { tag: t.comment, color: "#5c6a7e", fontStyle: "italic" },
-  { tag: t.operator, color: "#ff9db1" },
-  { tag: t.variableName, color: "#c9d6e8" },
+  { tag: t.keyword, color: "var(--code-keyword)", fontWeight: "600" },
+  { tag: t.atom, color: "var(--code-atom)" },
+  { tag: t.number, color: "var(--code-number)" },
+  { tag: t.comment, color: "var(--code-comment)", fontStyle: "italic" },
+  { tag: t.operator, color: "var(--code-operator)" },
+  { tag: t.variableName, color: "var(--code-variable)" },
 ]);
 
 /* ------------------------------------------------- active line decoration */
@@ -132,26 +132,31 @@ const missionTheme = EditorView.theme(
       lineHeight: "1.65",
       padding: "6px 0",
     },
-    ".cm-content": { caretColor: "#35e0a1" },
+    ".cm-content": { caretColor: "var(--accent)" },
     ".cm-gutters": {
       backgroundColor: "transparent",
-      color: "#3c4a5e",
+      color: "var(--code-gutter)",
       border: "none",
     },
-    ".cm-activeLine": { backgroundColor: "rgba(53, 224, 161, 0.05)" },
+    ".cm-activeLine": { backgroundColor: "color-mix(in srgb, var(--accent) 6%, transparent)" },
     ".cm-mission-active": {
-      backgroundColor: "rgba(53, 224, 161, 0.14)",
-      boxShadow: "inset 2px 0 0 #35e0a1",
+      backgroundColor: "color-mix(in srgb, var(--accent) 14%, transparent)",
+      boxShadow: "inset 2px 0 0 var(--accent)",
     },
-    ".cm-activeLineGutter": { backgroundColor: "transparent", color: "#93a1b5" },
+    ".cm-activeLineGutter": { backgroundColor: "transparent", color: "var(--text-1)" },
     "&.cm-focused": { outline: "none" },
+    ".cm-selectionBackground, &.cm-focused .cm-selectionBackground": {
+      backgroundColor: "var(--selection) !important",
+    },
     ".cm-tooltip": {
-      backgroundColor: "#11161d",
-      border: "1px solid #1b2330",
-      color: "#e8edf4",
+      backgroundColor: "var(--bg-2)",
+      border: "1px solid var(--line)",
+      color: "var(--text-0)",
     },
   },
-  { dark: true },
+  // flag only marks base-style flavor; all colors come from CSS vars above,
+  // so the same theme serves light and dark
+  { dark: false },
 );
 
 /* ---------------------------------------------------------------- editor */

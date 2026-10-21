@@ -1,4 +1,5 @@
 import { Viewport } from "@/components/Viewport";
+import { TopBar } from "@/components/TopBar";
 import { MissionEditor } from "@/components/editor/MissionEditor";
 import { MissionControls } from "@/components/editor/MissionControls";
 import { NlCompileBar, ReportPanel } from "@/components/editor/AiTools";
@@ -6,18 +7,10 @@ import { NlCompileBar, ReportPanel } from "@/components/editor/AiTools";
 export default function Home() {
   return (
     <div className="app">
-      <header className="topbar">
-        <div className="brand">
-          <span className="brand-mark" />
-          PATROL<span className="brand-thin">LAB</span>
-        </div>
-        <div className="topbar-meta">
-          mission control for autonomous inspection robots
-        </div>
-        <div className="topbar-status">
-          <span className="status-pill status-idle">SIM KINEMATIC</span>
-        </div>
-      </header>
+      <TopBar
+        meta="mission control for autonomous inspection robots"
+        right={<span className="status-pill status-idle">SIM KINEMATIC</span>}
+      />
 
       <main className="main">
         <aside className="pane-left" data-testid="editor-pane">
