@@ -40,6 +40,9 @@ Development must rely on these documents, never on chat history.
   (robot meshes ~16 MB) load async with a visible progress state, never blocking UI.
 - **Secrets:** no secrets in git. Everything via env vars; `.env.example` holds
   placeholders only.
+- **This VPS hosts other production stacks.** Never bind ports below 3031 and never
+  assume port 3000 is free; local/e2e server uses `next start -p 3031` (registered in
+  `~/PORTS.md`). Production runs on Vercel, not on this host.
 - **Verification before done:** `npm run lint && npm run build` must pass, plus
   `npx playwright test` for affected flows. Phases are only complete after push.
 - **Commits:** conventional commits (`feat|fix|docs|chore|refactor|test(scope): msg`).
