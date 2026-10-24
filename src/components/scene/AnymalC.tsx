@@ -42,5 +42,5 @@ export default function AnymalC() {
     };
   }, [setProgress, setViewportReady]);
 
-  return rig ? <primitive object={rig.root} /> : null;
+  return rig ? <primitive object={rig.holder} /> : null;
 }

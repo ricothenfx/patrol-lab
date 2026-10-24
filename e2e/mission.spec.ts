@@ -25,7 +25,7 @@ test("golden mission runs end-to-end: DONE, findings logged, robot moved", async
   await page.getByTestId("preset-patrol_alpha").click();
   await page.getByTestId("btn-run").click();
 
-  await expect(page.getByTestId("mission-status-pill")).toHaveText("DONE", { timeout: 90_000 });
+  await expect(page.getByTestId("mission-status-pill")).toHaveText("DONE", { timeout: 150_000 });
 
   // patrol_alpha has 4 INSPECT statements → exactly 4 findings (deterministic)
   const findingText = await page.getByTestId("finding-count").textContent();

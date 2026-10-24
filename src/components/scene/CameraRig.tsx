@@ -2,33 +2,47 @@
 
 /* eslint-disable react-hooks/immutability -- three.js objects are imperative systems mutated inside the frame loop by design (ADR-04) */
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { useUi } from "@/state/store";
 import { sim } from "@/lib/simworld";
 
 /**
- * Follow camera: translates the whole camera rig (position + orbit target) by
- * the robot's per-frame delta, so the operator keeps whatever orbit angle they
- * had when follow engaged — and OrbitControls never fights the follow (its
- * update() would otherwise re-derive position from its own spherical state).
+ * Follow camera: the orbit target tracks the robot EXACTLY (no lag, so the
+ * robot stays composed while walking and scanning), while the camera offset
+ * drifts slowly toward the ideal framing — keeping the operator's orbit angle
+ * and zoom for a few seconds before recentering. OrbitControls is gated to
+ * orbit mode (its update() would otherwise fight the follow).
  */
 const IDEAL_OFFSET = new THREE.Vector3(2.3, 1.7, 2.4);
-const idealPos = new THREE.Vector3();
-const idealTarget = new THREE.Vector3();
+const offset = new THREE.Vector3();
+const target = new THREE.Vector3();
 
 export function CameraRig() {
   const camera = useThree((s) => s.camera);
   const controls = useThree((s) => s.controls) as
     | { target: THREE.Vector3; update: () => void; enabled: boolean }
     | null;
-  const lastRobot = useRef(new THREE.Vector3());
-  const following = useRef(false);
   const robotPos = useRef(new THREE.Vector3());
-  const delta = useRef(new THREE.Vector3());
+  const following = useRef(false);
 
-  useFrame(({ clock }) => {
+  useEffect(() => {
+    // debug/e2e hook extension: live camera pose for autonomous review
+    const w = window as typeof window & {
+      __patrol?: { camera?: () => { pos: [number, number, number]; target: [number, number, number] } };
+    };
+    if (w.__patrol) {
+      w.__patrol.camera = () => ({
+        pos: [camera.position.x, camera.position.y, camera.position.z],
+        target: controls
+          ? [controls.target.x, controls.target.y, controls.target.z]
+          : [0, 0, 0],
+      });
+    }
+  }, [camera, controls]);
+
+  useFrame((_, delta) => {
     const mode = useUi.getState().camMode;
     // three.js OrbitControls is an imperative object; toggling `enabled` inside
     // the frame loop is its intended API (not React state).
@@ -40,35 +54,23 @@ export function CameraRig() {
 
     robotPos.current.set(sim.pose.x, 0, sim.pose.z);
     if (!following.current) {
-      // engage: adopt current view, just start tracking from here
-      lastRobot.current.copy(robotPos.current);
+      // engage: adopt the current view, then start tracking from here
+      offset.copy(camera.position).sub(robotPos.current);
       following.current = true;
-      return;
     }
 
-    delta.current.copy(robotPos.current).sub(lastRobot.current);
-    if (delta.current.lengthSq() > 1e-8) {
-      camera.position.add(delta.current);
-      if (controls) {
-        controls.target.add(delta.current);
-      } else {
-        camera.lookAt(robotPos.current);
-      }
-      lastRobot.current.copy(robotPos.current);
-    }
+    // frame-rate-independent drift toward the ideal offset (keeps user angle
+    // and zoom for several seconds, then gently recomposes)
+    const k = 1 - Math.exp(-0.5 * Math.min(delta, 0.1));
+    offset.lerp(IDEAL_OFFSET, k);
 
-    // gentle drift toward the ideal framing so the robot stays well composed
-    // (slow enough to keep user orbit angles for several seconds)
-    const k = 1 - Math.exp(-0.55 * 0.016);
-    void clock;
-    idealPos.copy(robotPos.current).add(IDEAL_OFFSET);
-    idealTarget.copy(robotPos.current).setY(0.45);
-    camera.position.lerp(idealPos, k);
+    target.copy(robotPos.current).setY(0.45);
+    camera.position.copy(robotPos.current).add(offset);
     if (controls) {
-      controls.target.lerp(idealTarget, k);
+      controls.target.copy(target);
       controls.update();
     } else {
-      camera.lookAt(idealTarget);
+      camera.lookAt(target);
     }
   });
 

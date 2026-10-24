@@ -52,3 +52,16 @@ per-locale content modules. Protocol vocabulary stays English everywhere (status
 words IDLE/RUNNING/PAUSED/DONE/FAULT, DSL keywords, MOCK/LLM/RULE-BASED badges,
 preset names) so the honesty labels remain consistent across languages; the
 server-generated inspection report is likewise an English artifact.
+
+## ADR-08 — Kinematic gait: world-anchored footsteps + numeric leg IK
+The first gait drove joint angles with one shared sine shape. The MJCF bends
+front knees opposite to hind knees (elbow vs knee) and mirrors leg axes, so
+identical joint offsets move front/hind feet in opposite world directions and
+the baked stand pose left the front paws floating (measured with
+`scripts/sign_probe.mjs`). The gait now works in world space: each foot owns a
+planted anchor that is FROZEN during stance while a small damped Gauss-Newton
+IK (HAA/HFE/KFE, finite-difference Jacobian on the live chain) keeps it there
+as the body moves; diagonal pairs swing along an arc to a fresh anchor ahead
+of the hip. Feet cannot slide, the stand is level at 0.55 m, arrival settles
+onto the target (2 cm eps) instead of snapping up to 22 cm. Deterministic:
+phase derives from accumulated dt only.

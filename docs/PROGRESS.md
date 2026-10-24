@@ -98,3 +98,21 @@ Phase 6 (hardening + launch) — done. Shipped: https://patrol-lab.vercel.app
   beta_patrol preset = gentle-arc demo (single POI, two inspections). Honest limits:
   gentle heading arcs only; sharp turns + MJX-trained policy are future work.
   e2e/dynamics.spec.ts covers switch → run → DONE at 4×; full suite green locally.
+- 2026-10-24: movement overhaul — "the robot never actually walked". An
+  autonomous review loop (Playwright video + 10 Hz pose/holder/camera
+  telemetry, `scripts/record_review.mjs`) exposed four stacked defects:
+  (1) ROOT CAUSE — `<primitive object={rig.root}>` reparented the root out of
+  `rig.holder`, so pose (x/z/yaw) never reached the render: the robot danced
+  at the origin while the sim/camera traveled the site. Fixed by mounting the
+  holder; `sim.holderWorld()` + an orientation-spec guard now assert
+  holder==pose and driver-forward==heading (the old driver-euler assertions
+  passed vacuously against the orphaned holder). (2) Follow-camera lag: the
+  lerp target trailed a walking robot by ~1.6 m and pushed it out of frame —
+  rewritten to exact target tracking + dt-based offset drift. (3) The baked
+  stand pose put front paws ~8 cm above ground (front/hind knees bend
+  oppositely; identical angles are asymmetric — `scripts/sign_probe.mjs`).
+  (4) The shared-sine gait moved front/hind feet anti-phase (sliding skitter).
+  Replaced by ADR-08: world-anchored footsteps + numeric leg IK
+  (`src/lib/gait.ts`), level 0.55 m stance, arrival settle instead of snap.
+  e2e budgets for the 4-core SwiftShader host raised to 150 s DONE waits
+  (headless fps ~3 caps playback). Full local suite 14/14 green.

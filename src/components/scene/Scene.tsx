@@ -22,6 +22,7 @@ function Ticker() {
       mode: () => (orchestrator.runner.busy ? "mission" : sim.mode),
       loc: () => sim.locMode,
       pose: () => sim.pose,
+      holder: () => sim.holderWorld(),
       orient: () => sim.orientation(),
     };
   }, [gl]);
