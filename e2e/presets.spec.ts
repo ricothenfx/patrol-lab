@@ -31,7 +31,7 @@ async function waitForRobot(page: Page) {
 
 test.describe.configure({ mode: "serial" });
 
-test.skip(process.env.CI, "full 8-mission sweep is a local/manual check — CI runs the golden mission");
+test.skip(Boolean(process.env.CI), "full 8-mission sweep is a local/manual check — CI runs the golden mission");
 
 test("editor exposes all eight mission scenarios", async ({ page, baseURL }) => {
   await setLocaleCookie(page, "en", baseURL);
