@@ -116,3 +116,11 @@ Phase 6 (hardening + launch) — done. Shipped: https://patrol-lab.vercel.app
   (`src/lib/gait.ts`), level 0.55 m stance, arrival settle instead of snap.
   e2e budgets for the 4-core SwiftShader host raised to 150 s DONE waits
   (headless fps ~3 caps playback). Full local suite 14/14 green.
+- 2026-10-25: preset expansion — 5 new mission scenarios next to the golden
+  demo: full_circuit (all 5 POIs, mixed modes, per-leg speeds), night_shift
+  (slow dwells + inverted thresholds TEMP<=44 / VIBRATION<0.3 for cold/stall
+  faults), vib_watch (acoustic rotating-machinery survey), gas_patrol
+  (double-sampled leak survey on tank farm + manifold), sprint_audit (1.6×
+  fast pass, one thermal shot per asset). Alert thresholds calibrated against
+  the seeded sensor noise bands in findings.ts so alerts fire occasionally,
+  not never/always; PRESETS[0] stays patrol_alpha (initial editor doc + e2e).

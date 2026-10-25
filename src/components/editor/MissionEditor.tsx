@@ -66,6 +66,123 @@ INSPECT pump_station THERMAL ALERT IF TEMP>75
 INSPECT pump_station ACOUSTIC
 END`,
   },
+  {
+    id: "full_circuit",
+    label: "full_circuit · 5/5 coverage",
+    code: `# full_circuit — one pass over every POI on the site.
+# Mixed sensor modes, per-leg speeds, full coverage demo.
+MISSION full_circuit
+
+SPEED 1.0
+GOTO pump_station SPEED 1.2
+INSPECT pump_station THERMAL ALERT IF TEMP>75
+INSPECT pump_station ACOUSTIC
+
+GOTO tank_farm SPEED 1.4
+INSPECT tank_farm VISUAL
+INSPECT tank_farm ACOUSTIC ALERT IF GAS>10
+
+GOTO gauge_bank SPEED 1.0
+INSPECT gauge_bank THERMAL
+
+GOTO valve_manifold SPEED 0.8
+INSPECT valve_manifold VISUAL ALERT IF GAS>=8.5
+WAIT 1
+
+GOTO transformer_row SPEED 0.9
+INSPECT transformer_row THERMAL ALERT IF TEMP>75
+INSPECT transformer_row ACOUSTIC
+WAIT 0.5
+END`,
+  },
+  {
+    id: "night_shift",
+    label: "night_shift · slow cold watch",
+    code: `# night_shift — slow night watch with long dwells.
+# Also flags the opposite failures: a cold gauge bank and a
+# stalled machine whose vibration signature goes quiet.
+MISSION night_shift
+
+SPEED 0.6
+GOTO gauge_bank
+WAIT 3
+INSPECT gauge_bank THERMAL ALERT IF TEMP<=44
+INSPECT gauge_bank ACOUSTIC ALERT IF VIBRATION<0.3
+
+GOTO pump_station SPEED 0.7
+WAIT 4
+INSPECT pump_station THERMAL ALERT IF TEMP>65
+INSPECT pump_station ACOUSTIC
+
+GOTO transformer_row
+WAIT 5
+INSPECT transformer_row THERMAL ALERT IF TEMP>=75
+END`,
+  },
+  {
+    id: "vib_watch",
+    label: "vib_watch · acoustic trio",
+    code: `# vib_watch — rotating-machinery vibration survey.
+# Acoustic-only passes with thresholds near the top of the
+# healthy band, plus one thermal cross-check on the pump.
+MISSION vib_watch
+
+SPEED 0.9
+GOTO pump_station
+INSPECT pump_station ACOUSTIC ALERT IF VIBRATION>=2.55
+INSPECT pump_station THERMAL ALERT IF TEMP>66
+
+GOTO transformer_row SPEED 1.1
+INSPECT transformer_row ACOUSTIC ALERT IF VIBRATION>1.65
+
+GOTO valve_manifold SPEED 0.9
+WAIT 2
+INSPECT valve_manifold ACOUSTIC ALERT IF VIBRATION>=1.4
+END`,
+  },
+  {
+    id: "gas_patrol",
+    label: "gas_patrol · leak survey",
+    code: `# gas_patrol — leak survey of the tank farm and manifold row.
+# Double-sampling: a second reading per POI to separate a
+# drifting plume from sensor noise.
+MISSION gas_patrol
+
+SPEED 1.1
+GOTO tank_farm
+INSPECT tank_farm VISUAL ALERT IF GAS>10
+WAIT 2
+INSPECT tank_farm ACOUSTIC ALERT IF GAS>10
+
+GOTO valve_manifold SPEED 0.8
+INSPECT valve_manifold VISUAL ALERT IF GAS>=8.5
+WAIT 2
+INSPECT valve_manifold THERMAL
+INSPECT valve_manifold ACOUSTIC ALERT IF GAS>=8.5
+END`,
+  },
+  {
+    id: "sprint_audit",
+    label: "sprint_audit · fast pass",
+    code: `# sprint_audit — fast full-speed audit, one thermal shot per
+# asset. Trade dwell time for route time; per-GOTO speeds slow
+# the approach leg only.
+MISSION sprint_audit
+
+SPEED 1.6
+GOTO transformer_row SPEED 1.2
+INSPECT transformer_row THERMAL ALERT IF TEMP>75
+
+GOTO gauge_bank
+INSPECT gauge_bank THERMAL ALERT IF TEMP>52
+
+GOTO valve_manifold SPEED 1.4
+INSPECT valve_manifold THERMAL ALERT IF TEMP>59
+
+GOTO pump_station
+INSPECT pump_station THERMAL ALERT IF TEMP>66
+END`,
+  },
 ];
 
 /* --------------------------------------------------------------- language */
