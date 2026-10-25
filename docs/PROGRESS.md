@@ -124,3 +124,7 @@ Phase 6 (hardening + launch) — done. Shipped: https://patrol-lab.vercel.app
   fast pass, one thermal shot per asset). Alert thresholds calibrated against
   the seeded sensor noise bands in findings.ts so alerts fire occasionally,
   not never/always; PRESETS[0] stays patrol_alpha (initial editor doc + e2e).
+  Verification: e2e/presets.spec.ts sweeps all 8 scenarios locally (DONE +
+  deterministic findings/coverage/odometer per mission; CI-skipped, ~10 min)
+  — 9/9 green; one production smoke pass via e2e/prod-smoke.spec.ts
+  (E2E_BASE_URL-gated): all 8 preset buttons served + beta_patrol DONE live.
